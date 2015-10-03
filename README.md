@@ -9,7 +9,7 @@ ECSV is an enhanced format based on CSV. Main killer-feature is basic array and 
 
 ECSV parser doesn't use any reflection or annotations, so it should be extremely fast. See examples of ECSV formatted output in test files. Also check out ExampleDirectory as example of ECSV entity implementation.
 
-##Copyright and license terms
+## Copyright and license terms
 
 Library distributed under terms of GNU LGPLv3 license.
 
