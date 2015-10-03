@@ -1,5 +1,5 @@
-ExampleDirectory
-ExampleDirectory
-ExampleDirectory
-ExampleDirectory
-ExampleDirectory
+ExampleDirectory:Root,null,{Root directory},[hide,red],[Tom:false,Joe:false]
+ExampleDirectory:Private,Root,{My private files},[private,blue],[Tom:false,Joe:false,Micky:false]
+ExampleDirectory:Images,Private,{My photos and etc.},[private,green],[Jackob:false]
+ExampleDirectory:Video,Private,{My movies.},[shared,red],[Admin:false]
+ExampleDirectory:Src,Private,{Source files of some evil program!},[hide,black],[Tom:false,Joe:false]

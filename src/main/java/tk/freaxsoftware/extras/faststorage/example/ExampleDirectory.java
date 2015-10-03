@@ -80,7 +80,7 @@ public class ExampleDirectory implements ECSVAble {
     public String packToString(Boolean appendType) {
         //Example: ExampleDirectory:Root,null,{Root directory},[hide,red],[Tom:false,Joe:false]
         Packer<ExamplePermission> packer = new StandardPacker();
-        return appendType ? getEntityType() : "" + ECSVFormat.KEY_VALUE_SEPARATOR + getName() + ECSVFormat.GENERIC_SEPARATOR + getParentName() + ECSVFormat.GENERIC_SEPARATOR
+        return (appendType ? getEntityType() : "") + ECSVFormat.KEY_VALUE_SEPARATOR + getName() + ECSVFormat.GENERIC_SEPARATOR + getParentName() + ECSVFormat.GENERIC_SEPARATOR
                 + ECSVFormat.WHITE_ZONE_BEGIN + getDescription() + ECSVFormat.WHITE_ZONE_END + ECSVFormat.GENERIC_SEPARATOR
                 + OldStaticParser.renderGroup(getMarks()) + ECSVFormat.GENERIC_SEPARATOR + ECSVFormat.ARRAY_BEGIN
                 + packer.packEntities(getPermissions(), false) + ECSVFormat.ARRAY_END;
