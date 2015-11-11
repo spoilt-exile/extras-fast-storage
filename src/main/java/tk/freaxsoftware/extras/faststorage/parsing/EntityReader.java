@@ -105,7 +105,7 @@ public interface EntityReader<K> {
      * Reads map in stream as key-value array.
      * @return map of parsed values;
      */
-    Map<String, Object> readMap();
+    Map readMap();
     
     /**
      * Reads internal ECSV entity in string white zone.

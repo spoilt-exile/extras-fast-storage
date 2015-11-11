@@ -44,11 +44,11 @@ public interface ECSVAble<K> {
      * Reads all data from reader and apply them to current entity instance.
      * @param reader helper object for entity readeing;
      */
-    void readFromECSV(EntityReader reader);
+    void readFromECSV(EntityReader<K> reader);
     
     /**
      * Writes all data from entity to ECSV stream.
      * @param writer helper object to entity writing;
      */
-    void writeToECSV(EntityWriter writer);
+    void writeToECSV(EntityWriter<K> writer);
 }

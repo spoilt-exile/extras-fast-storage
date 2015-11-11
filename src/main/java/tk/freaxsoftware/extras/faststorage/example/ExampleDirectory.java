@@ -19,6 +19,7 @@
 
 package tk.freaxsoftware.extras.faststorage.example;
 
+import java.util.List;
 import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
@@ -32,6 +33,8 @@ import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
  */
 public class ExampleDirectory implements ECSVAble<Integer> {
     
+    public static final String TYPE = "DIR";
+    
     private Integer id;
     
     private String name;
@@ -40,7 +43,7 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     
     private String description;
     
-    private String[] marks;
+    private List<String> marks;
     
     private Map<String, Boolean> permissions;
 
@@ -97,14 +100,14 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     /**
      * @return the marks
      */
-    public String[] getMarks() {
+    public List<String> getMarks() {
         return marks;
     }
 
     /**
      * @param marks the marks to set
      */
-    public void setMarks(String[] marks) {
+    public void setMarks(List<String> marks) {
         this.marks = marks;
     }
 
@@ -135,17 +138,29 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     }
 
     @Override
-    public void readFromECSV(EntityReader reader) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void readFromECSV(EntityReader<Integer> reader) {
+        reader.readType();
+        this.id = reader.readKey();
+        this.name = reader.readWord();
+        this.parentName = reader.readWord();
+        this.description = reader.readString();
+        this.marks = (List<String>) reader.readArray();
+        this.permissions = (Map<String, Boolean>) reader.readMap();
     }
 
     @Override
-    public void writeToECSV(EntityWriter writer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void writeToECSV(EntityWriter<Integer> writer) {
+        writer.writeType(TYPE);
+        writer.writeKey(id);
+        writer.writeWord(name);
+        writer.writeWord(parentName);
+        writer.writeString(description);
+        writer.writeArray(marks);
+        writer.writeMap(permissions);
     }
 
     @Override
     public Integer getKey() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.id;
     }
 }
