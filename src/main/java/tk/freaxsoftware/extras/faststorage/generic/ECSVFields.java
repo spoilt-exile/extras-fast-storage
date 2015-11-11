@@ -30,14 +30,9 @@ public enum ECSVFields {
     TYPE,
     
     /**
-     * Entity key as integer digit.
+     * Entity key.
      */
-    KEY_INT,
-    
-    /**
-     * Entity key as string.
-     */
-    KEY_STR,
+    KEY,
     
     /**
      * One word without spaces or any special chars. 
@@ -75,6 +70,11 @@ public enum ECSVFields {
     SC_REF,
     
     /**
+     * Array of references for sublist of another entity (maybe even other type).
+     */
+    SC_REF_ARRAY,
+    
+    /**
      * Simple array of words or digits.
      */
     CX_ARRAY,
@@ -87,5 +87,10 @@ public enum ECSVFields {
     /**
      * Internal entity inside white zone of string.
      */
-    CX_INTERNAL;
+    CX_INTERNAL, 
+    
+    /**
+     * Internal enteties array inside white zone of string.
+     */
+    CX_INTERNAL_ARRAY;
 }

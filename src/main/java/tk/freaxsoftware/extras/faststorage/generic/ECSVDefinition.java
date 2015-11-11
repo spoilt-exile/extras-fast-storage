@@ -56,6 +56,16 @@ public class ECSVDefinition {
     }
     
     /**
+     * Adds key field to current definition and return current instance.
+     * @param keyClass class of key value;
+     * @return instance;
+     */
+    public ECSVDefinition addKey(Class keyClass) {
+        fields.add(new ECSVFieldKey(ECSVFields.KEY, keyClass));
+        return this;
+    }
+    
+    /**
      * Adds primitive field to current definition and return current instance.
      * @param field field definition to add;
      * @return instance;
@@ -79,11 +89,24 @@ public class ECSVDefinition {
     /**
      * Add reference field to current definition and return current instance.
      * @param <R> reference type generic;
+     * @param <K> reference entity key class;
      * @param refClass reference type class;
      * @return instance;
      */
-    public <R extends ECSVAble> ECSVDefinition addReference(Class<R> refClass) {
-        fields.add(new ECSVFieldReference(ECSVFields.SC_REF, refClass));
+    public <R extends ECSVAble, K> ECSVDefinition addReference(Class<R> refClass, Class<K> refKeyClass) {
+        fields.add(new ECSVFieldReference(ECSVFields.SC_REF, refClass, refKeyClass));
+        return this;
+    }
+    
+    /**
+     * Add reference array field to current definition and return current instance.
+     * @param <R> reference type generic;
+     * @param <K> reference entity key class;
+     * @param refClass reference type class;
+     * @return instance;
+     */
+    public <R extends ECSVAble, K> ECSVDefinition addReferenceArray(Class<R> refClass, Class<K> refKeyClass) {
+        fields.add(new ECSVFieldReference(ECSVFields.SC_REF_ARRAY, refClass, refKeyClass));
         return this;
     }
     
@@ -110,12 +133,24 @@ public class ECSVDefinition {
     
     /**
      * Add internal field to current definition and return current instance.
-     * @param <R> internal entity type generic;
-     * @param refClass internal entity type class;
+     * @param <E> internal entity type generic;
+     * @param internalClass internal entity type class;
      * @return instance;
      */
-    public <R extends ECSVAble> ECSVDefinition addInternal(Class<R> refClass) {
-        fields.add(new ECSVFieldReference(ECSVFields.CX_INTERNAL, refClass));
+    public <E extends ECSVAble> ECSVDefinition addInternal(Class<E> internalClass) {
+        fields.add(new ECSVFieldInternal(internalClass));
+        return this;
+    }
+    
+    /**
+     * Add internal array field to current definition and return current instance.
+     * @param <E> internal entity type generic;
+     * @param internalClass internal entity type class;
+     * @param entitySeparator separation char which used for entity separation within stream;
+     * @return instance;
+     */
+    public <E extends ECSVAble> ECSVDefinition addInternalArray(Class<E> internalClass, char entitySeparator) {
+        fields.add(new ECSVFieldInternal(internalClass, entitySeparator));
         return this;
     }
     
@@ -139,6 +174,26 @@ public class ECSVDefinition {
 
         public void setField(ECSVFields field) {
             this.field = field;
+        }
+    }
+    
+    /**
+     * Key field holder class.
+     */
+    public static class ECSVFieldKey extends ECSVFieldPrimitive {
+        private Class keyClass;
+
+        public ECSVFieldKey(ECSVFields givenField, Class givenKeyClass) {
+            super(givenField);
+            keyClass = givenKeyClass;
+        }
+
+        public Class getKeyClass() {
+            return keyClass;
+        }
+
+        public void setKeyClass(Class keyClass) {
+            this.keyClass = keyClass;
         }
     }
     
@@ -167,13 +222,16 @@ public class ECSVDefinition {
      * Reference/internal field holder with class.
      * @param <R> reference or internal entity type generic;
      */
-    public static class ECSVFieldReference<R extends ECSVAble> extends ECSVFieldPrimitive {
+    public static class ECSVFieldReference<R extends ECSVAble, K> extends ECSVFieldPrimitive {
         
         private Class<R> referenceClass;
+        
+        private Class<K> referenceKeyClass;
 
-        public ECSVFieldReference(ECSVFields givenField, Class<R> givenRefClass) {
+        public ECSVFieldReference(ECSVFields givenField, Class<R> givenRefClass, Class<K> givenKeyClass) {
             super(givenField);
             referenceClass = givenRefClass;
+            referenceKeyClass = givenKeyClass;
         }
 
         public Class<R> getReferenceClass() {
@@ -182,6 +240,14 @@ public class ECSVDefinition {
 
         public void setReferenceClass(Class<R> referenceClass) {
             this.referenceClass = referenceClass;
+        }
+
+        public Class<K> getReferenceKeyClass() {
+            return referenceKeyClass;
+        }
+
+        public void setReferenceKeyClass(Class<K> referenceKeyClass) {
+            this.referenceKeyClass = referenceKeyClass;
         }
     }
     
@@ -235,6 +301,53 @@ public class ECSVDefinition {
 
         public void setValueType(ECSVFields valueType) {
             this.valueType = valueType;
+        }
+    }
+    
+    /**
+     * Internal field holder.
+     * @param <E> entity generic;
+     */
+    public static class ECSVFieldInternal<E extends ECSVAble> extends ECSVFieldPrimitive {
+        
+        private Class<E> entityClass;
+        
+        private char separator = (char) -1;
+
+        /**
+         * Simple internal constructor.
+         * @param givenEntityClass entity class;
+         */
+        public ECSVFieldInternal(Class<E> givenEntityClass) {
+            super(ECSVFields.CX_INTERNAL);
+            entityClass = givenEntityClass;
+        }
+        
+        /**
+         * Array internal constructor.
+         * @param givenEntityClass entity class;
+         * @param givenSeparator separator char for packing array into string;
+         */
+        public ECSVFieldInternal(Class<E> givenEntityClass, char givenSeparator) {
+            super(ECSVFields.CX_INTERNAL_ARRAY);
+            entityClass = givenEntityClass;
+            separator = givenSeparator;
+        }
+
+        public Class<E> getEntityClass() {
+            return entityClass;
+        }
+
+        public void setEntityClass(Class<E> entityClass) {
+            this.entityClass = entityClass;
+        }
+
+        public char getSeparator() {
+            return separator;
+        }
+
+        public void setSeparator(char separator) {
+            this.separator = separator;
         }
     }
 }

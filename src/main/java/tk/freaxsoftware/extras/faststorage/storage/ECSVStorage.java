@@ -25,9 +25,9 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * Basic storage operation interface,
  * @author Stanislav Nepochatov
  * @param <E> entity type;
- * @param <I> entitie's id type;
+ * @param <K> entitie's id type;
  */
-public interface ECSVStorage<E extends ECSVAble, I> {
+public interface ECSVStorage<E extends ECSVAble<K>, K> {
     
     /**
      * Creates new entity in storage.
@@ -46,7 +46,7 @@ public interface ECSVStorage<E extends ECSVAble, I> {
      * @param key entity key;
      * @return entity with specified key;
      */
-    E get(I key);
+    E get(K key);
     
     /**
      * Finds entity in storage by string query.

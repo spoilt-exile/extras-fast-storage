@@ -95,4 +95,9 @@ public final class ECSVFormat {
      */
     public static final char KEY_VALUE_SEPARATOR_CHAR = ':';
     
+    /**
+     * Default separation char for entity separation within white zone of stream.
+     */
+    public static final char INTERNAL_DEFAULT_SEPARATOR = '$';
+    
 }

@@ -26,7 +26,13 @@ import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
  * Interface with some util methods for object serialization/deserialization with ECSV format.
  * @author Stanislav Nepochatov
  */
-public interface ECSVAble {
+public interface ECSVAble<K> {
+    
+    /**
+     * Gets entity key.
+     * @return entity unique key;
+     */
+    K getKey();
     
     /**
      * Get entity definition by fields.

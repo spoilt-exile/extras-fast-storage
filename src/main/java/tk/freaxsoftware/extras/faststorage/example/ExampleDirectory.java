@@ -30,7 +30,9 @@ import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
  * Example directory entity.
  * @author Stanislav Nepochatov
  */
-public class ExampleDirectory implements ECSVAble {
+public class ExampleDirectory implements ECSVAble<Integer> {
+    
+    private Integer id;
     
     private String name;
     
@@ -42,6 +44,14 @@ public class ExampleDirectory implements ECSVAble {
     
     private Map<String, Boolean> permissions;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
     /**
      * @return the name
      */
@@ -116,6 +126,7 @@ public class ExampleDirectory implements ECSVAble {
     public ECSVDefinition getDefinition() {
         return ECSVDefinition.createNew()
                 .addPrimitive(ECSVFields.TYPE)
+                .addKey(Integer.class)
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_STRING)
@@ -130,6 +141,11 @@ public class ExampleDirectory implements ECSVAble {
 
     @Override
     public void writeToECSV(EntityWriter writer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer getKey() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

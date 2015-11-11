@@ -27,8 +27,9 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 /**
  * ECSV entity reader helper interface.
  * @author Stanislav Nepochatov
+ * @param <K> entity key type generic;
  */
-public interface EntityReader {
+public interface EntityReader<K> {
     
     /**
      * Reads entity type attribute.
@@ -37,16 +38,10 @@ public interface EntityReader {
     String readType();
     
     /**
-     * Reads integer entity key value.
-     * @return integer key;
+     * Reads entity key value.
+     * @return entity key;
      */
-    Integer readKeyInt();
-    
-    /**
-     * Reads string key of entity.
-     * @return string key;
-     */
-    String readKeyStr();
+    K readKey();
     
     /**
      * Reads single word in stream.
@@ -93,6 +88,14 @@ public interface EntityReader {
     <R extends ECSVAble> EntityReference<R> readReference(Class<R> entityRefClass);
     
     /**
+     * Reads array of entity references.
+     * @param <R> reference type generic;
+     * @param entityRefClass referented entity class;
+     * @return list of reference helper object for lazy loading;
+     */
+    <R extends ECSVAble> List<EntityReference<R>> readReferenceArray(Class<R> entityRefClass);
+    
+    /**
      * Reads array in stream.
      * @return list of parsed array values;
      */
@@ -111,4 +114,12 @@ public interface EntityReader {
      * @return parsed entity;
      */
     <E extends ECSVAble> E readInternal(Class<E> entityInternalClass);
+    
+    /**
+     * Reads internal ECSV entity array in string white zone.
+     * @param <E> entity type generic;
+     * @param entityInternalClass entity class;
+     * @return list of parsed entity;
+     */
+    <E extends ECSVAble> List<E> readInternalArray(Class<E> entityInternalClass);
 }
