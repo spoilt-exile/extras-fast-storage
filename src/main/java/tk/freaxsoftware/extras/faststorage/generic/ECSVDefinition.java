@@ -30,7 +30,7 @@ public class ECSVDefinition {
     /**
      * List of fields.
      */
-    private List<ECSVFields> fields;
+    private List<ECSVFieldPrimitive> fields;
     
     /**
      * Private constructor.
@@ -47,21 +47,194 @@ public class ECSVDefinition {
         return new ECSVDefinition();
     }
 
-    public List<ECSVFields> getFields() {
+    public List<ECSVFieldPrimitive> getFields() {
         return fields;
     }
 
-    public void setFields(List<ECSVFields> fields) {
+    public void setFields(List<ECSVFieldPrimitive> fields) {
         this.fields = fields;
     }
     
     /**
-     * Adds field to current definition and return current instance.
+     * Adds primitive field to current definition and return current instance.
      * @param field field definition to add;
      * @return instance;
+     * @see ECSVFields
      */
-    public ECSVDefinition add(ECSVFields field) {
-        fields.add(field);
+    public ECSVDefinition addPrimitive(ECSVFields field) {
+        fields.add(new ECSVFieldPrimitive(field));
         return this;
+    }
+    
+    /**
+     * Adds date field to current definition and return current instance.
+     * @param format date format string;
+     * @return instance;
+     */
+    public ECSVDefinition addDate(String format) {
+        fields.add(new ECSVFieldDate(ECSVFields.SC_DATE, format));
+        return this;
+    }
+    
+    /**
+     * Add reference field to current definition and return current instance.
+     * @param <R> reference type generic;
+     * @param refClass reference type class;
+     * @return instance;
+     */
+    public <R extends ECSVAble> ECSVDefinition addReference(Class<R> refClass) {
+        fields.add(new ECSVFieldReference(ECSVFields.SC_REF, refClass));
+        return this;
+    }
+    
+    /**
+     * Add array of primitives field to current definition and return current instance.
+     * @param innerType inner type in array;
+     * @return instance;
+     */
+    public ECSVDefinition addArray(ECSVFields innerType) {
+        fields.add(new ECSVFieldArray(ECSVFields.CX_ARRAY, innerType));
+        return this;
+    }
+    
+    /**
+     * Add map of primitives field to current definition and return current instance.
+     * @param keyType key type of map;
+     * @param valueType value type of map;
+     * @return instance;
+     */
+    public ECSVDefinition addMap(ECSVFields keyType, ECSVFields valueType) {
+        fields.add(new ECSVFIeldMap(ECSVFields.CX_MAP, valueType, valueType));
+        return this;
+    }
+    
+    /**
+     * Add internal field to current definition and return current instance.
+     * @param <R> internal entity type generic;
+     * @param refClass internal entity type class;
+     * @return instance;
+     */
+    public <R extends ECSVAble> ECSVDefinition addInternal(Class<R> refClass) {
+        fields.add(new ECSVFieldReference(ECSVFields.CX_INTERNAL, refClass));
+        return this;
+    }
+    
+    /**
+     * Field holder class.
+     */
+    public static class ECSVFieldPrimitive {
+        
+        /**
+         * Incased field definition.
+         */
+        private ECSVFields field;
+        
+        public ECSVFieldPrimitive(ECSVFields givenField) {
+            this.field = givenField;
+        }
+
+        public ECSVFields getField() {
+            return field;
+        }
+
+        public void setField(ECSVFields field) {
+            this.field = field;
+        }
+    }
+    
+    /**
+     * Date field holder with format.
+     */
+    public static class ECSVFieldDate extends ECSVFieldPrimitive {
+        
+        private String dateFormat;
+
+        public ECSVFieldDate(ECSVFields givenField, String givenFormat) {
+            super(givenField);
+            dateFormat = givenFormat;
+        }
+
+        public String getDateFormat() {
+            return dateFormat;
+        }
+
+        public void setDateFormat(String dateFormat) {
+            this.dateFormat = dateFormat;
+        }
+    }
+    
+    /**
+     * Reference/internal field holder with class.
+     * @param <R> reference or internal entity type generic;
+     */
+    public static class ECSVFieldReference<R extends ECSVAble> extends ECSVFieldPrimitive {
+        
+        private Class<R> referenceClass;
+
+        public ECSVFieldReference(ECSVFields givenField, Class<R> givenRefClass) {
+            super(givenField);
+            referenceClass = givenRefClass;
+        }
+
+        public Class<R> getReferenceClass() {
+            return referenceClass;
+        }
+
+        public void setReferenceClass(Class<R> referenceClass) {
+            this.referenceClass = referenceClass;
+        }
+    }
+    
+    /**
+     * Array field holder with internal type info.
+     */
+    public static class ECSVFieldArray extends ECSVFieldPrimitive {
+        
+        private ECSVFields innerType;
+
+        public ECSVFieldArray(ECSVFields givenField, ECSVFields givenInnerType) {
+            super(givenField);
+            innerType = givenInnerType;
+        }
+
+        public ECSVFields getInnerType() {
+            return innerType;
+        }
+
+        public void setInnerType(ECSVFields innerType) {
+            this.innerType = innerType;
+        }
+    }
+    
+    /**
+     * Map field holder with internal key and value info.
+     */
+    public static class ECSVFIeldMap extends ECSVFieldPrimitive {
+        
+        private ECSVFields keyType;
+
+        private ECSVFields valueType;
+        
+        public ECSVFIeldMap(ECSVFields givenField, ECSVFields givenKeyType, ECSVFields givenValueType) {
+            super(givenField);
+            keyType = givenKeyType;
+            valueType = givenValueType;
+        }
+
+        public ECSVFields getKeyType() {
+            return keyType;
+        }
+
+        public void setKeyType(ECSVFields keyType) {
+            this.keyType = keyType;
+        }
+
+        public ECSVFields getValueType() {
+            return valueType;
+        }
+
+        public void setValueType(ECSVFields valueType) {
+            this.valueType = valueType;
+        }
     }
 }

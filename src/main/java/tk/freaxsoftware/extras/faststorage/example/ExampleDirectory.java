@@ -115,12 +115,12 @@ public class ExampleDirectory implements ECSVAble {
     @Override
     public ECSVDefinition getDefinition() {
         return ECSVDefinition.createNew()
-                .add(ECSVFields.TYPE)
-                .add(ECSVFields.PR_WORD)
-                .add(ECSVFields.PR_WORD)
-                .add(ECSVFields.PR_STRING)
-                .add(ECSVFields.CX_ARRAY)
-                .add(ECSVFields.CX_MAP);
+                .addPrimitive(ECSVFields.TYPE)
+                .addPrimitive(ECSVFields.PR_WORD)
+                .addPrimitive(ECSVFields.PR_WORD)
+                .addPrimitive(ECSVFields.PR_STRING)
+                .addArray(ECSVFields.PR_WORD)
+                .addMap(ECSVFields.PR_WORD, ECSVFields.PR_BOOLEAN);
     }
 
     @Override
