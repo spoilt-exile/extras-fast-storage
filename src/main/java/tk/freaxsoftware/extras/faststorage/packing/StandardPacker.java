@@ -37,17 +37,17 @@ public class StandardPacker<E extends ECSVAble> implements Packer<E> {
     public String packEntities(List<E> entities, Boolean appendTypes) {
         StringBuffer buf = new StringBuffer();
         int counter = 0;
-        for(E entity: entities) {
-            entity.pack(buf, appendTypes);
-            if (entity.getCurrentType() == ECSVType.KEY_VALUE) {
-                if (counter < entities.size() - 1) {
-                    buf.append(ECSVFormat.GENERIC_SEPARATOR);
-                }
-            } else {
-                buf.append(ECSVFormat.LINE_BREAK);
-            }
-            ++counter;
-        }
+//        for(E entity: entities) {
+//            entity.pack(buf, appendTypes);
+//            if (entity.getCurrentType() == ECSVType.KEY_VALUE) {
+//                if (counter < entities.size() - 1) {
+//                    buf.append(ECSVFormat.GENERIC_SEPARATOR);
+//                }
+//            } else {
+//                buf.append(ECSVFormat.LINE_BREAK);
+//            }
+//            ++counter;
+//        }
         
         return buf.toString();
     }
@@ -55,7 +55,7 @@ public class StandardPacker<E extends ECSVAble> implements Packer<E> {
     @Override
     public void packEntities(List<E> entities, Boolean appendTypes, Writer entityWriter) throws IOException {
         for(E entity: entities) {
-            entityWriter.write(entity.packToString(appendTypes) + ECSVFormat.LINE_BREAK);
+//            entityWriter.write(entity.packToString(appendTypes) + ECSVFormat.LINE_BREAK);
         }
     }
     

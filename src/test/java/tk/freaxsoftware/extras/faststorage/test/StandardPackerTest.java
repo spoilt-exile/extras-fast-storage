@@ -34,40 +34,40 @@ import org.junit.Test;
  */
 public class StandardPackerTest {
     
-    @Test
-    public void packTest() throws IOException {
-        Packer<ExampleDirectory> packer = new StandardPacker();
-        
-        List<ExampleDirectory> dirList = new ArrayList<>();
-        dirList.add(makeExampleDirectory("Root", null, "Root directory", new String[] {"hide", "red"}, new String[] {"Tom", "Joe"}));
-        dirList.add(makeExampleDirectory("Private", "Root", "My private files", new String[] {"private", "blue"}, new String[] {"Tom", "Joe", "Micky"}));
-        dirList.add(makeExampleDirectory("Images", "Private", "My photos and etc.", new String[] {"private", "green"}, new String[] {"Jackob"}));
-        dirList.add(makeExampleDirectory("Video", "Private", "My movies.", new String[] {"shared", "red"}, new String[] {"Admin"}));
-        dirList.add(makeExampleDirectory("Src", "Private", "Source files of some evil program!", new String[] {"hide", "black"}, new String[] {"Tom", "Joe"}));
-        
-        FileWriter writer = new FileWriter("test-pack.ecsv");
-        
-        System.out.println(packer.packEntities(dirList, true));
-        packer.packEntities(dirList, true, writer);
-        writer.close();
-    }
-    
-    private ExampleDirectory makeExampleDirectory(String name, String parent, String desc, String[] marks, String[] permNames) {
-        ExampleDirectory dir1 = new ExampleDirectory();
-        dir1.setName(name);
-        dir1.setParentName(parent);
-        dir1.setDescription(desc);
-        dir1.setMarks(marks);
-        List<ExampleDirectory.ExamplePermission> perms1 = new ArrayList<>();
-        for (String permName: permNames) {
-            ExampleDirectory.ExamplePermission perm1 = new ExampleDirectory.ExamplePermission();
-            perm1.setUserName(permName);
-            perm1.setMayAcess(false);
-            perms1.add(perm1);
-        }
-        dir1.setPermissions(perms1);
-        
-        return dir1;
-    }
+//    @Test
+//    public void packTest() throws IOException {
+//        Packer<ExampleDirectory> packer = new StandardPacker();
+//        
+//        List<ExampleDirectory> dirList = new ArrayList<>();
+//        dirList.add(makeExampleDirectory("Root", null, "Root directory", new String[] {"hide", "red"}, new String[] {"Tom", "Joe"}));
+//        dirList.add(makeExampleDirectory("Private", "Root", "My private files", new String[] {"private", "blue"}, new String[] {"Tom", "Joe", "Micky"}));
+//        dirList.add(makeExampleDirectory("Images", "Private", "My photos and etc.", new String[] {"private", "green"}, new String[] {"Jackob"}));
+//        dirList.add(makeExampleDirectory("Video", "Private", "My movies.", new String[] {"shared", "red"}, new String[] {"Admin"}));
+//        dirList.add(makeExampleDirectory("Src", "Private", "Source files of some evil program!", new String[] {"hide", "black"}, new String[] {"Tom", "Joe"}));
+//        
+//        FileWriter writer = new FileWriter("test-pack.ecsv");
+//        
+//        System.out.println(packer.packEntities(dirList, true));
+//        packer.packEntities(dirList, true, writer);
+//        writer.close();
+//    }
+//    
+//    private ExampleDirectory makeExampleDirectory(String name, String parent, String desc, String[] marks, String[] permNames) {
+//        ExampleDirectory dir1 = new ExampleDirectory();
+//        dir1.setName(name);
+//        dir1.setParentName(parent);
+//        dir1.setDescription(desc);
+//        dir1.setMarks(marks);
+//        List<ExampleDirectory.ExamplePermission> perms1 = new ArrayList<>();
+//        for (String permName: permNames) {
+//            ExampleDirectory.ExamplePermission perm1 = new ExampleDirectory.ExamplePermission();
+//            perm1.setUserName(permName);
+//            perm1.setMayAcess(false);
+//            perms1.add(perm1);
+//        }
+//        dir1.setPermissions(perms1);
+//        
+//        return dir1;
+//    }
     
 }

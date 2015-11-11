@@ -35,55 +35,55 @@ import org.junit.Test;
  */
 public class StandardParserTest {
     
-    @Test
-    public void parseTest() throws FileNotFoundException, InstantiationException, IllegalAccessException, ParseException {
-        FileReader reader = new FileReader("test-parse.ecsv");
-        
-        Parser<ExampleDirectory> parser = new StandardParser(ExampleDirectory.class);
-        
-        List<ExampleDirectory> dirs = parser.readEntities(reader, true);
-        
-        assertTrue(dirs.size() == 5);
-                
-        //First entity check
-        assertNotNull(dirs.get(0).getName());
-        assertNotNull(dirs.get(0).getParentName());
-        assertNotNull(dirs.get(0).getDescription());
-        assertNotNull(dirs.get(0).getMarks());
-        assertNotNull(dirs.get(0).getPermissions());
-        assertFalse(dirs.get(0).getPermissions().isEmpty());
-        
-        //Second entity check
-        assertNotNull(dirs.get(1).getName());
-        assertNotNull(dirs.get(1).getParentName());
-        assertNotNull(dirs.get(1).getDescription());
-        assertNotNull(dirs.get(1).getMarks());
-        assertNotNull(dirs.get(1).getPermissions());
-        assertFalse(dirs.get(1).getPermissions().isEmpty());
-        
-        //Third entity check
-        assertNotNull(dirs.get(2).getName());
-        assertNotNull(dirs.get(2).getParentName());
-        assertNotNull(dirs.get(2).getDescription());
-        assertNotNull(dirs.get(2).getMarks());
-        assertNotNull(dirs.get(2).getPermissions());
-        assertFalse(dirs.get(2).getPermissions().isEmpty());
-        
-        //Fourth entity check
-        assertNotNull(dirs.get(3).getName());
-        assertNotNull(dirs.get(3).getParentName());
-        assertNotNull(dirs.get(3).getDescription());
-        assertNotNull(dirs.get(3).getMarks());
-        assertNotNull(dirs.get(3).getPermissions());
-        assertFalse(dirs.get(3).getPermissions().isEmpty());
-
-        //Fifth entity check
-        assertNotNull(dirs.get(4).getName());
-        assertNotNull(dirs.get(4).getParentName());
-        assertNotNull(dirs.get(4).getDescription());
-        assertNotNull(dirs.get(4).getMarks());
-        assertNotNull(dirs.get(4).getPermissions());
-        assertFalse(dirs.get(4).getPermissions().isEmpty());
-    }
+//    @Test
+//    public void parseTest() throws FileNotFoundException, InstantiationException, IllegalAccessException, ParseException {
+//        FileReader reader = new FileReader("test-parse.ecsv");
+//        
+//        Parser<ExampleDirectory> parser = new StandardParser(ExampleDirectory.class);
+//        
+//        List<ExampleDirectory> dirs = parser.readEntities(reader, true);
+//        
+//        assertTrue(dirs.size() == 5);
+//                
+//        //First entity check
+//        assertNotNull(dirs.get(0).getName());
+//        assertNotNull(dirs.get(0).getParentName());
+//        assertNotNull(dirs.get(0).getDescription());
+//        assertNotNull(dirs.get(0).getMarks());
+//        assertNotNull(dirs.get(0).getPermissions());
+//        assertFalse(dirs.get(0).getPermissions().isEmpty());
+//        
+//        //Second entity check
+//        assertNotNull(dirs.get(1).getName());
+//        assertNotNull(dirs.get(1).getParentName());
+//        assertNotNull(dirs.get(1).getDescription());
+//        assertNotNull(dirs.get(1).getMarks());
+//        assertNotNull(dirs.get(1).getPermissions());
+//        assertFalse(dirs.get(1).getPermissions().isEmpty());
+//        
+//        //Third entity check
+//        assertNotNull(dirs.get(2).getName());
+//        assertNotNull(dirs.get(2).getParentName());
+//        assertNotNull(dirs.get(2).getDescription());
+//        assertNotNull(dirs.get(2).getMarks());
+//        assertNotNull(dirs.get(2).getPermissions());
+//        assertFalse(dirs.get(2).getPermissions().isEmpty());
+//        
+//        //Fourth entity check
+//        assertNotNull(dirs.get(3).getName());
+//        assertNotNull(dirs.get(3).getParentName());
+//        assertNotNull(dirs.get(3).getDescription());
+//        assertNotNull(dirs.get(3).getMarks());
+//        assertNotNull(dirs.get(3).getPermissions());
+//        assertFalse(dirs.get(3).getPermissions().isEmpty());
+//
+//        //Fifth entity check
+//        assertNotNull(dirs.get(4).getName());
+//        assertNotNull(dirs.get(4).getParentName());
+//        assertNotNull(dirs.get(4).getDescription());
+//        assertNotNull(dirs.get(4).getMarks());
+//        assertNotNull(dirs.get(4).getPermissions());
+//        assertFalse(dirs.get(4).getPermissions().isEmpty());
+//    }
     
 }

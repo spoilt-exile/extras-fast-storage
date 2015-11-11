@@ -19,17 +19,12 @@
 
 package tk.freaxsoftware.extras.faststorage.example;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
-import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
-import tk.freaxsoftware.extras.faststorage.generic.ECSVType;
-import tk.freaxsoftware.extras.faststorage.packing.Packer;
-import tk.freaxsoftware.extras.faststorage.packing.StandardPacker;
-import tk.freaxsoftware.extras.faststorage.parsing.OldStaticParser;
-import tk.freaxsoftware.extras.faststorage.parsing.ParseResult;
-import tk.freaxsoftware.extras.faststorage.parsing.Parser;
-import tk.freaxsoftware.extras.faststorage.parsing.StandardParser;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
+import tk.freaxsoftware.extras.faststorage.packing.EntityWriter;
+import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
 
 /**
  * Example directory entity.
@@ -45,63 +40,7 @@ public class ExampleDirectory implements ECSVAble {
     
     private String[] marks;
     
-    private List<ExamplePermission> permissions;
-
-    @Override
-    public String getEntityType() {
-        //Using for type key short name of class, but any string will handle.
-        return this.getClass().getSimpleName();
-    }
-
-    @Override
-    public int getBasicCount() {
-        //This example has three basic fields: name, parentName and description.
-        return 3;
-    }
-
-    @Override
-    public int getArrayCount() {
-        //This example has two array-type fileds: marks and permissions. Permissions is also key-value pair.
-        return 2;
-    }
-
-    @Override
-    public ECSVType getCurrentType() {
-        //Example has arrays, so it's complex entity.
-        return ECSVType.COMPLEX_ECSV;
-    }
-
-    @Override
-    public void pack(StringBuffer buffer, Boolean appendType) {
-        buffer.append(this.packToString(appendType));
-    }
-
-    @Override
-    public String packToString(Boolean appendType) {
-        //Example: ExampleDirectory:Root,null,{Root directory},[hide,red],[Tom:false,Joe:false]
-        Packer<ExamplePermission> packer = new StandardPacker();
-        return (appendType ? getEntityType() : "") + ECSVFormat.KEY_VALUE_SEPARATOR + getName() + ECSVFormat.GENERIC_SEPARATOR + getParentName() + ECSVFormat.GENERIC_SEPARATOR
-                + ECSVFormat.WHITE_ZONE_BEGIN + getDescription() + ECSVFormat.WHITE_ZONE_END + ECSVFormat.GENERIC_SEPARATOR
-                + OldStaticParser.renderGroup(getMarks()) + ECSVFormat.GENERIC_SEPARATOR + ECSVFormat.ARRAY_BEGIN
-                + packer.packEntities(getPermissions(), false) + ECSVFormat.ARRAY_END;
-    }
-
-    @Override
-    public void unPack(ParseResult result) {
-        setName(result.getBasics()[0]);
-        setParentName(result.getBasics()[1]);
-        setDescription(result.getBasics()[2]);
-        setMarks(result.getArrays().get(0));
-        
-        //Parsing permission enteties. Parsing should be handle out of this class, this code for example of parsing.
-        List<String> permStrings = Arrays.asList(result.getArrays().get(1));
-        try {
-            Parser<ExamplePermission> permParser = new StandardParser(ExamplePermission.class);
-            setPermissions(permParser.readEntities(permStrings, false));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+    private Map<String, Boolean> permissions;
 
     /**
      * @return the name
@@ -162,96 +101,35 @@ public class ExampleDirectory implements ECSVAble {
     /**
      * @return the permissions
      */
-    public List<ExamplePermission> getPermissions() {
+    public Map<String, Boolean> getPermissions() {
         return permissions;
     }
 
     /**
      * @param permissions the permissions to set
      */
-    public void setPermissions(List<ExamplePermission> permissions) {
+    public void setPermissions(Map<String, Boolean> permissions) {
         this.permissions = permissions;
     }
 
-    /**
-     * Example permission entry.
-     */
-    public static class ExamplePermission implements ECSVAble {
-        
-        private String userName;
-        
-        private Boolean mayAcess;
+    @Override
+    public ECSVDefinition getDefinition() {
+        return ECSVDefinition.createNew()
+                .add(ECSVFields.TYPE)
+                .add(ECSVFields.PR_WORD)
+                .add(ECSVFields.PR_WORD)
+                .add(ECSVFields.PR_STRING)
+                .add(ECSVFields.CX_ARRAY)
+                .add(ECSVFields.CX_MAP);
+    }
 
-        public ExamplePermission() {
-        }
+    @Override
+    public void readFromECSV(EntityReader reader) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        @Override
-        public String getEntityType() {
-            //Cause key-value pair can't use type prefix.
-            return null;
-        }
-
-        @Override
-        public int getBasicCount() {
-            //Only two words.
-            return 2;
-        }
-
-        @Override
-        public int getArrayCount() {
-            //No arrays.
-            return 0;
-        }
-
-        @Override
-        public ECSVType getCurrentType() {
-            return ECSVType.KEY_VALUE;
-        }
-
-        @Override
-        public void pack(StringBuffer buffer, Boolean appendType) {
-            buffer.append(this.packToString(appendType));
-        }
-
-        @Override
-        public String packToString(Boolean appendType) {
-            //Example: Tom:false
-            return getUserName() + ECSVFormat.KEY_VALUE_SEPARATOR + getMayAcess().toString();
-        }
-
-        @Override
-        public void unPack(ParseResult result) {
-            this.setUserName(result.getBasics()[0]);
-            //Non-string value recovery.
-            this.setMayAcess((Boolean) Boolean.parseBoolean(result.getBasics()[1]));
-        }
-
-        /**
-         * @return the userName
-         */
-        public String getUserName() {
-            return userName;
-        }
-
-        /**
-         * @param userName the userName to set
-         */
-        public void setUserName(String userName) {
-            this.userName = userName;
-        }
-
-        /**
-         * @return the mayAcess
-         */
-        public Boolean getMayAcess() {
-            return mayAcess;
-        }
-
-        /**
-         * @param mayAcess the mayAcess to set
-         */
-        public void setMayAcess(Boolean mayAcess) {
-            this.mayAcess = mayAcess;
-        }
-    }    
+    @Override
+    public void writeToECSV(EntityWriter writer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -348,18 +348,18 @@ public final class OldStaticParser {
      * @return parsed struct;
      */
     public static java.util.ArrayList<String[]> fromCsv(ECSVAble gvenRef, String givenCsv) {
-        switch (gvenRef.getCurrentType()) {
-            case BASIC_ECSV:
-                java.util.ArrayList<String[]> parsed = new java.util.ArrayList<String[]>();
-                parsed.add(commonParseLine(givenCsv, gvenRef.getBasicCount()));
-                return parsed;
-            case COMPLEX_ECSV:
-                return complexParseLine(givenCsv, gvenRef.getBasicCount(), gvenRef.getArrayCount());
-            case KEY_VALUE:
-                java.util.ArrayList<String[]> parsedDouble = new java.util.ArrayList<String[]>();
-                parsedDouble.add(parseDoubleStruct(givenCsv));
-                return parsedDouble;
-        }
+//        switch (gvenRef.getCurrentType()) {
+//            case BASIC_ECSV:
+//                java.util.ArrayList<String[]> parsed = new java.util.ArrayList<String[]>();
+//                parsed.add(commonParseLine(givenCsv, gvenRef.getBasicCount()));
+//                return parsed;
+//            case COMPLEX_ECSV:
+//                return complexParseLine(givenCsv, gvenRef.getBasicCount(), gvenRef.getArrayCount());
+//            case KEY_VALUE:
+//                java.util.ArrayList<String[]> parsedDouble = new java.util.ArrayList<String[]>();
+//                parsedDouble.add(parseDoubleStruct(givenCsv));
+//                return parsedDouble;
+//        }
         return null;
     }
     

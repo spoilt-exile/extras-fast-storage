@@ -61,38 +61,40 @@ public class StandardParser<E extends ECSVAble> implements Parser<E> {
 
     @Override
     public E readEntity(String rawEntity, Boolean extractType) throws InstantiationException, IllegalAccessException, ParseException {
-        ParseResult result = new ParseResult(reference.getEntityType(), reference.getBasicCount(), reference.getArrayCount());
-        
-        String entityString = null;
-        if (extractType && reference.getCurrentType() != ECSVType.KEY_VALUE) {
-            String[] typeExtract = this.tryExtractType(rawEntity);
-            if (typeExtract[0] != null) {
-                result.setType(typeExtract[0]);
-            }
-            entityString = typeExtract[1];
-        } else {
-            entityString = rawEntity;
-        }
-        result.setRawString(entityString);
-        E readedEntity = refClass.newInstance();
-        
-        switch (reference.getCurrentType()) {
-            case BASIC_ECSV: {
-                this.commonParseLine(result, entityString, reference.getBasicCount());
-                break;
-            }
-            case COMPLEX_ECSV: {
-                this.complexParseLine(result, entityString, reference.getBasicCount(), reference.getArrayCount());
-                break;
-            }
-            case KEY_VALUE: {
-                this.parseKeyValue(result, entityString);
-            }
-        }
-        
-        readedEntity.unPack(result);
-        
-        return readedEntity;
+//        ParseResult result = new ParseResult(reference.getEntityType(), reference.getBasicCount(), reference.getArrayCount());
+//        
+//        String entityString = null;
+//        if (extractType && reference.getCurrentType() != ECSVType.KEY_VALUE) {
+//            String[] typeExtract = this.tryExtractType(rawEntity);
+//            if (typeExtract[0] != null) {
+//                result.setType(typeExtract[0]);
+//            }
+//            entityString = typeExtract[1];
+//        } else {
+//            entityString = rawEntity;
+//        }
+//        result.setRawString(entityString);
+//        E readedEntity = refClass.newInstance();
+//        
+//        switch (reference.getCurrentType()) {
+//            case BASIC_ECSV: {
+//                this.commonParseLine(result, entityString, reference.getBasicCount());
+//                break;
+//            }
+//            case COMPLEX_ECSV: {
+//                this.complexParseLine(result, entityString, reference.getBasicCount(), reference.getArrayCount());
+//                break;
+//            }
+//            case KEY_VALUE: {
+//                this.parseKeyValue(result, entityString);
+//            }
+//        }
+//        
+//        readedEntity.unPack(result);
+//        
+//        return readedEntity;
+        //TO-DO: remake this
+        return null;
     }
 
     @Override

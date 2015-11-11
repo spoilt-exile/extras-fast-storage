@@ -16,33 +16,52 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-
 package tk.freaxsoftware.extras.faststorage.generic;
 
-import tk.freaxsoftware.extras.faststorage.packing.EntityWriter;
-import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Interface with some util methods for object serialization/deserialization with ECSV format.
+ * ECSV entity type definition.
  * @author Stanislav Nepochatov
  */
-public interface ECSVAble {
+public class ECSVDefinition {
     
     /**
-     * Get entity definition by fields.
-     * @return fully inited definition of entity;
+     * List of fields.
      */
-    ECSVDefinition getDefinition();
+    private List<ECSVFields> fields;
     
     /**
-     * Reads all data from reader and apply them to current entity instance.
-     * @param reader helper object for entity readeing;
+     * Private constructor.
      */
-    void readFromECSV(EntityReader reader);
+    private ECSVDefinition() {
+        fields = new ArrayList<>();
+    }
     
     /**
-     * Writes all data from entity to ECSV stream.
-     * @param writer helper object to entity writing;
+     * Factory method: get new definition instance.
+     * @return new instance.
      */
-    void writeToECSV(EntityWriter writer);
+    public static ECSVDefinition createNew() {
+        return new ECSVDefinition();
+    }
+
+    public List<ECSVFields> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<ECSVFields> fields) {
+        this.fields = fields;
+    }
+    
+    /**
+     * Adds field to current definition and return current instance.
+     * @param field field definition to add;
+     * @return instance;
+     */
+    public ECSVDefinition add(ECSVFields field) {
+        fields.add(field);
+        return this;
+    }
 }
