@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
+import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
 import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 
 /**
@@ -82,18 +83,20 @@ public interface EntityReader<K> {
     /**
      * Reads entity reference.
      * @param <R> reference type generic;
+     * @param <K> reference key generic;
      * @param entityRefClass referented entity class;
      * @return reference helper object for lazy loading;
      */
-    <R extends ECSVAble> EntityReference<R> readReference(Class<R> entityRefClass);
+    <R extends ECSVAble<K>, K> EntityReference<R, K> readReference(Class<R> entityRefClass);
     
     /**
      * Reads array of entity references.
      * @param <R> reference type generic;
+     * @param <K> reference key generic;
      * @param entityRefClass referented entity class;
-     * @return list of reference helper object for lazy loading;
+     * @return instance of list reference helper object for lazy loading;
      */
-    <R extends ECSVAble> List<EntityReference<R>> readReferenceArray(Class<R> entityRefClass);
+    <R extends ECSVAble<K>, K> EntityListReference<R, K> readReferenceArray(Class<R> entityRefClass);
     
     /**
      * Reads array in stream.

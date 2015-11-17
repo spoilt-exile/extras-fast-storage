@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
+import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
 import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 
 /**
@@ -82,16 +83,18 @@ public interface EntityWriter<K> {
     /**
      * Writes entity reference in stream.
      * @param <R> entity reference type generic;
+     * @param <K> entity reference key type generic;
      * @param reference entity reference object;
      */
-    <R extends ECSVAble> void writeReference(EntityReference<R> reference);
+    <R extends ECSVAble<K>, K> void writeReference(EntityReference<R, K> reference);
     
     /**
      * Writes entity reference array in stream.
      * @param <R> entity reference type generic;
-     * @param referenceArray list of references;
+     * @param <K> entity reference key type generic;
+     * @param referenceArray list reference instance;
      */
-    <R extends ECSVAble> void wriyeReferenceArray(List<EntityReference<R>> referenceArray);
+    <R extends ECSVAble<K>, K> void writeReferenceArray(EntityListReference<R, K> referenceArray);
     
     /**
      * Write primitive array in stream.

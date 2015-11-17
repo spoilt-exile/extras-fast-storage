@@ -19,11 +19,11 @@
 package tk.freaxsoftware.extras.faststorage.generic;
 
 /**
- * Entity reference class. Used for lazy reference aquire.
+ * Entity list reference class. Used for lazy reference aquire.
  * @author Stanislav Nepochatov
  * @param <R> referenced entity generic type;
  * @param <K> referenced entity key generic type;
  */
-public class EntityReference<R extends ECSVAble<K>, K> {
+public class EntityListReference<R extends ECSVAble<K>, K> {
     
 }
