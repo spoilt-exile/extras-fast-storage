@@ -53,6 +53,14 @@ public class EntityListReference<R extends ECSVAble<K>, K> {
     }
     
     /**
+     * Gets keys of reference.
+     * @return list of keys instance;
+     */
+    public List<K> getKeys() {
+        return keys;
+    }
+    
+    /**
      * Gets list of enteties from reference. Method may block execution for a while.
      * @return list of enteties from reference;
      */

@@ -52,6 +52,14 @@ public class EntityReference<R extends ECSVAble<K>, K> {
     }
     
     /**
+     * Gets key of reference.
+     * @return key instance;
+     */
+    public K getKey() {
+        return key;
+    }
+    
+    /**
      * Gets entity from reference. Method may block execution for a while.
      * @return entity from reference;
      */

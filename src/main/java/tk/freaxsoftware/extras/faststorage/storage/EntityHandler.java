@@ -59,9 +59,16 @@ public interface EntityHandler<E extends ECSVAble<K>, K> extends ECSVStorage<E, 
     EntityListReference<E, K> getListReference(List<K> keys);
     
     /**
-     * Handle raw string entity form.
+     * Reads entity from raw string.
      * @param rawString entity raw string;
      * @return entity instance;
      */
-    E handleRaw(String rawString);
+    E readFromString(String rawString);
+    
+    /**
+     * Writes entity to string.
+     * @param entity entity to write;
+     * @return string form of entity;
+     */
+    String writeToString(E entity);
 }
