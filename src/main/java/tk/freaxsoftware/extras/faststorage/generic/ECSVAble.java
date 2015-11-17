@@ -19,8 +19,8 @@
 
 package tk.freaxsoftware.extras.faststorage.generic;
 
-import tk.freaxsoftware.extras.faststorage.packing.EntityWriter;
-import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
+import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
+import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 
 /**
  * Interface with some util methods for object serialization/deserialization with ECSV format.

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 import java.util.Date;
 import java.util.List;

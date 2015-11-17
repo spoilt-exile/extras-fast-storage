@@ -23,9 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
-import tk.freaxsoftware.extras.faststorage.parsing.ParseException;
-import tk.freaxsoftware.extras.faststorage.parsing.Parser;
-import tk.freaxsoftware.extras.faststorage.parsing.StandardParser;
+import tk.freaxsoftware.extras.faststorage.reading.ParseException;
+import tk.freaxsoftware.extras.faststorage.reading.Parser;
+import tk.freaxsoftware.extras.faststorage.reading.StandardParser;
 import static org.junit.Assert.*;
 import org.junit.Test;
 

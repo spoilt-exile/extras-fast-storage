@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-package tk.freaxsoftware.extras.faststorage.packing;
+package tk.freaxsoftware.extras.faststorage.writing;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -27,6 +27,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * Entity packer interface.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
+ * @deprecated 
  */
 public interface Packer<E extends ECSVAble> {
     

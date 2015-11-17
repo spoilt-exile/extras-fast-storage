@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
-import tk.freaxsoftware.extras.faststorage.packing.Packer;
-import tk.freaxsoftware.extras.faststorage.packing.StandardPacker;
+import tk.freaxsoftware.extras.faststorage.writing.Packer;
+import tk.freaxsoftware.extras.faststorage.writing.StandardPacker;
 import org.junit.Test;
 
 /**

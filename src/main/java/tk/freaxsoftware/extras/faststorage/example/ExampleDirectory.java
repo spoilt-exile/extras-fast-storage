@@ -24,8 +24,8 @@ import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
-import tk.freaxsoftware.extras.faststorage.packing.EntityWriter;
-import tk.freaxsoftware.extras.faststorage.parsing.EntityReader;
+import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
+import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 
 /**
  * Example directory entity.

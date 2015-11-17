@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 

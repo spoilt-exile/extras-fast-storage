@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 import java.io.Reader;
 import java.util.List;
@@ -27,6 +27,8 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * Parser main interface.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
+ * @deprecated replaced by ECSVStorage
+ * @see tk.freaxsoftware.extras.faststorage.storage.ECSVStorage
  */
 public interface Parser<E extends ECSVAble> {
     

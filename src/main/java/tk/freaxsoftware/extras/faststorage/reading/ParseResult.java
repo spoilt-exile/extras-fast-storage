@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,8 @@ import java.util.List;
 /**
  * Parse result structure which holds parsed data.
  * @author Stanislav Nepochatov
+ * @deprecated replaced by EntityReader
+ * @see EntityReader
  */
 public class ParseResult {
     

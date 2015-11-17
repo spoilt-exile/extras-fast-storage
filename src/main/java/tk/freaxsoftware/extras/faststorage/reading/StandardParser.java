@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +35,7 @@ import static tk.freaxsoftware.extras.faststorage.generic.ECSVType.KEY_VALUE;
  * Standard parser implementation.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
+ * @deprecated 
  */
 public class StandardParser<E extends ECSVAble> implements Parser<E> {
     

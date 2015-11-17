@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.packing;
+package tk.freaxsoftware.extras.faststorage.writing;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -30,6 +30,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVType;
  * Standard packer implementation.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
+ * @deprecated 
  */
 public class StandardPacker<E extends ECSVAble> implements Packer<E> {
     

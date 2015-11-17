@@ -17,11 +17,12 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.parsing;
+package tk.freaxsoftware.extras.faststorage.reading;
 
 /**
  * Parsing exception class.
  * @author spoilt
+ * @deprecated check new exception in v2
  */
 public class ParseException extends Exception {
     
