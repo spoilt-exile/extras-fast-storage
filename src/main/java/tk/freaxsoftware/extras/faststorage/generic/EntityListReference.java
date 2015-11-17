@@ -18,6 +18,12 @@
  */
 package tk.freaxsoftware.extras.faststorage.generic;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
+import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
+
 /**
  * Entity list reference class. Used for lazy reference aquire.
  * @author Stanislav Nepochatov
@@ -26,4 +32,44 @@ package tk.freaxsoftware.extras.faststorage.generic;
  */
 public class EntityListReference<R extends ECSVAble<K>, K> {
     
+    /**
+     * Referenced entity key.
+     */
+    private final List<K> keys;
+    
+    /**
+     * Hanlder responsible for referenced entity.
+     */
+    private final EntityHandler<R, K> handler;
+    
+    /**
+     * Constructor.
+     * @param givenKeys list of keys;
+     * @param givenHandler handler for entity;
+     */
+    public EntityListReference(List<K> givenKeys, EntityHandler<R, K> givenHandler) {
+        keys = givenKeys;
+        handler = givenHandler;
+    }
+    
+    /**
+     * Gets list of enteties from reference. Method may block execution for a while.
+     * @return list of enteties from reference;
+     */
+    public List<R> getEntities() {
+        Callable<List<R>> callable = new Callable<List<R>>() {
+
+            @Override
+            public List<R> call() throws Exception {
+                return handler.get(keys);
+            }
+        };
+        try {
+            List<R> entities = ThreadPoolUtil.getExecutor().submit(callable).get();
+            return entities;
+        } catch (InterruptedException | ExecutionException ex) {
+            //Do nothing;
+        }
+        return null;
+    }
 }

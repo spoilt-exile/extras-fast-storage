@@ -49,6 +49,19 @@ public interface ECSVStorage<E extends ECSVAble<K>, K> {
     E get(K key);
     
     /**
+     * Gets list of enteties by list of those keys.
+     * @param keys entity keys list;
+     * @return list of enteties;
+     */
+    List<E> get(List<K> keys);
+    
+    /**
+     * Get all enteties from storage.
+     * @return list of enteties;
+     */
+    List<E> getAll();
+    
+    /**
      * Finds entity in storage by string query.
      * @param query search query;
      * @return list of enteties founded by query;

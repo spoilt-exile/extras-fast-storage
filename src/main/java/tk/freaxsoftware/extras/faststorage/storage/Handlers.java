@@ -58,6 +58,20 @@ public class Handlers {
     }
     
     /**
+     * Get handler by type.
+     * @param type supplied entity type.
+     * @return handler instance or null;
+     */
+    public static EntityHandler getHandlerByClass(String type) {
+        for (Record record: records) {
+            if (record.getType().equals(type)) {
+                return record.getInstance();
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Internal record class.
      */
     private static class Record {

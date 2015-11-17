@@ -18,6 +18,11 @@
  */
 package tk.freaxsoftware.extras.faststorage.generic;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
+import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
+
 /**
  * Entity reference class. Used for lazy reference aquire.
  * @author Stanislav Nepochatov
@@ -26,4 +31,44 @@ package tk.freaxsoftware.extras.faststorage.generic;
  */
 public class EntityReference<R extends ECSVAble<K>, K> {
     
+    /**
+     * Referenced entity key.
+     */
+    private final K key;
+    
+    /**
+     * Hanlder responsible for referenced entity.
+     */
+    private final EntityHandler<R, K> handler;
+    
+    /**
+     * Constructor.
+     * @param givenKey key of entity;
+     * @param givenHandler handler for entity;
+     */
+    public EntityReference(K givenKey, EntityHandler<R, K> givenHandler) {
+        key = givenKey;
+        handler = givenHandler;
+    }
+    
+    /**
+     * Gets entity from reference. Method may block execution for a while.
+     * @return entity from reference;
+     */
+    public R getEntity() {
+        Callable<R> callable = new Callable<R>() {
+
+            @Override
+            public R call() throws Exception {
+                return handler.get(key);
+            }
+        };
+        try {
+            R entity = ThreadPoolUtil.getExecutor().submit(callable).get();
+            return entity;
+        } catch (InterruptedException | ExecutionException ex) {
+            //Do nothing;
+        }
+        return null;
+    }
 }
