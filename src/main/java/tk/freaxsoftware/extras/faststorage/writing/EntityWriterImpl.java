@@ -217,8 +217,10 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     @Override
     public <E extends ECSVAble> void writeInternal(E entity) {
         checkField(ECSVFields.CX_INTERNAL);
+        buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
         EntityHandler handler = Handlers.getHandlerByClass(entity.getClass());
         buffer.append(handler.writeToString(entity));
+        buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         moveForward();
     }
 
