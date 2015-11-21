@@ -18,6 +18,7 @@
  */
 package tk.freaxsoftware.extras.faststorage.generic;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,54 @@ import java.util.List;
  * @author Stanislav Nepochatov
  */
 public class ECSVDefinition {
+    
+    /**
+     * Integer to string converter.
+     */
+    public static FieldConverter<Integer> CONVERTER_INTEGER = new FieldConverter<Integer>() {
+
+        @Override
+        public Integer convertFrom(String rawValue) {
+            return Integer.parseInt(rawValue);
+        }
+
+        @Override
+        public String convertTo(Integer fieldValue) {
+            return fieldValue.toString();
+        }
+    };
+    
+    /**
+     * Float to string converter.
+     */
+    public static FieldConverter<Float> CONVERTER_FLOAT = new FieldConverter<Float>() {
+
+        @Override
+        public Float convertFrom(String rawValue) {
+            return Float.parseFloat(rawValue);
+        }
+
+        @Override
+        public String convertTo(Float fieldValue) {
+            return fieldValue.toString();
+        }
+    };
+    
+    /**
+     * Boolean to string converter.
+     */
+    public static FieldConverter<Boolean> CONVERTER_BOOLEAN = new FieldConverter<Boolean>() {
+
+        @Override
+        public Boolean convertFrom(String rawValue) {
+            return Boolean.parseBoolean(rawValue);
+        }
+
+        @Override
+        public String convertTo(Boolean fieldValue) {
+            return fieldValue.toString();
+        }
+    };
     
     /**
      * List of fields.
@@ -112,22 +161,22 @@ public class ECSVDefinition {
     
     /**
      * Add array of primitives field to current definition and return current instance.
-     * @param innerType inner type in array;
+     * @param converter field converter for list content (use null if type of list is string);
      * @return instance;
      */
-    public ECSVDefinition addArray(ECSVFields innerType) {
-        fields.add(new ECSVFieldArray(ECSVFields.CX_ARRAY, innerType));
+    public ECSVDefinition addArray(FieldConverter converter) {
+        fields.add(new ECSVFieldArray(ECSVFields.CX_ARRAY, converter));
         return this;
     }
     
     /**
      * Add map of primitives field to current definition and return current instance.
-     * @param keyType key type of map;
-     * @param valueType value type of map;
+     * @param keyConverter key field converter of map (use null if type of map key is string);
+     * @param valueConverter value field converter of map (use null if type of map value is string);
      * @return instance;
      */
-    public ECSVDefinition addMap(ECSVFields keyType, ECSVFields valueType) {
-        fields.add(new ECSVFIeldMap(ECSVFields.CX_MAP, valueType, valueType));
+    public ECSVDefinition addMap(FieldConverter keyConverter, FieldConverter valueConverter) {
+        fields.add(new ECSVFIeldMap(ECSVFields.CX_MAP, keyConverter, valueConverter));
         return this;
     }
     
@@ -256,19 +305,15 @@ public class ECSVDefinition {
      */
     public static class ECSVFieldArray extends ECSVFieldPrimitive {
         
-        private ECSVFields innerType;
+        private final FieldConverter typeConverter;
 
-        public ECSVFieldArray(ECSVFields givenField, ECSVFields givenInnerType) {
+        public ECSVFieldArray(ECSVFields givenField, FieldConverter givenConverter) {
             super(givenField);
-            innerType = givenInnerType;
+            typeConverter = givenConverter;
         }
 
-        public ECSVFields getInnerType() {
-            return innerType;
-        }
-
-        public void setInnerType(ECSVFields innerType) {
-            this.innerType = innerType;
+        public FieldConverter getTypeConverter() {
+            return typeConverter;
         }
     }
     
@@ -277,30 +322,22 @@ public class ECSVDefinition {
      */
     public static class ECSVFIeldMap extends ECSVFieldPrimitive {
         
-        private ECSVFields keyType;
-
-        private ECSVFields valueType;
+        private final FieldConverter keyConverter;
+       
+        private final FieldConverter valueConverter;
         
-        public ECSVFIeldMap(ECSVFields givenField, ECSVFields givenKeyType, ECSVFields givenValueType) {
+        public ECSVFIeldMap(ECSVFields givenField, FieldConverter givenKeyConverter, FieldConverter givenValueConverter) {
             super(givenField);
-            keyType = givenKeyType;
-            valueType = givenValueType;
+            keyConverter = givenKeyConverter;
+            valueConverter = givenValueConverter;
         }
 
-        public ECSVFields getKeyType() {
-            return keyType;
+        public FieldConverter getKeyConverter() {
+            return keyConverter;
         }
 
-        public void setKeyType(ECSVFields keyType) {
-            this.keyType = keyType;
-        }
-
-        public ECSVFields getValueType() {
-            return valueType;
-        }
-
-        public void setValueType(ECSVFields valueType) {
-            this.valueType = valueType;
+        public FieldConverter getValueConverter() {
+            return valueConverter;
         }
     }
     
@@ -310,9 +347,9 @@ public class ECSVDefinition {
      */
     public static class ECSVFieldInternal<E extends ECSVAble> extends ECSVFieldPrimitive {
         
-        private Class<E> entityClass;
+        private final Class<E> entityClass;
         
-        private char separator = (char) -1;
+        private final String separator;
 
         /**
          * Simple internal constructor.
@@ -321,6 +358,7 @@ public class ECSVDefinition {
         public ECSVFieldInternal(Class<E> givenEntityClass) {
             super(ECSVFields.CX_INTERNAL);
             entityClass = givenEntityClass;
+            separator = null;
         }
         
         /**
@@ -331,23 +369,24 @@ public class ECSVDefinition {
         public ECSVFieldInternal(Class<E> givenEntityClass, char givenSeparator) {
             super(ECSVFields.CX_INTERNAL_ARRAY);
             entityClass = givenEntityClass;
-            separator = givenSeparator;
+            separator = String.valueOf(givenSeparator);
         }
 
         public Class<E> getEntityClass() {
             return entityClass;
         }
 
-        public void setEntityClass(Class<E> entityClass) {
-            this.entityClass = entityClass;
-        }
-
-        public char getSeparator() {
+        public String getSeparator() {
             return separator;
         }
-
-        public void setSeparator(char separator) {
-            this.separator = separator;
-        }
+    }
+    
+    /**
+     * Field converter interface for conversation between field forms.
+     * @param <T> type generic;
+     */
+    public static interface FieldConverter<T> {
+        T convertFrom(String rawValue);
+        String convertTo(T fieldValue);
     }
 }
