@@ -166,7 +166,7 @@ public class ECSVParser {
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ParseException("Basic words is more then specified, format error!", rawEntity, index);
+                            throw new ParseException("Word validation faield, format error!", rawEntity, index, currentField.getField());
                         }
                     }
                     break;
@@ -183,7 +183,7 @@ public class ECSVParser {
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ParseException("Basic words is more then specified, format error!", rawEntity, index);
+                            throw new ParseException("String validation failed, format error!", rawEntity, index, currentField.getField());
                         }
                     }
                     break;
@@ -198,7 +198,7 @@ public class ECSVParser {
                         if (validate(currentField.getField(), array)) {
                             parsed.add(array);
                         } else {
-                            throw new ParseException("Array count is more then specified, format error!", rawEntity, index);
+                            throw new ParseException("Array validation failed, format error!", rawEntity, index, currentField.getField());
                         }
                         moveForward();
                         beginSlice = index + 1;
@@ -218,8 +218,9 @@ public class ECSVParser {
                 if (validate(currentField.getField(), word)) {
                     parsed.add(word);
                 } else {
-                    throw new ParseException("Basic words is more then specified, format error!", rawEntity, index);
+                    throw new ParseException("Word validation failed, format error!", rawEntity, index, currentField.getField());
                 }
+                moveForward();
                 break;
             }
         }
@@ -231,7 +232,9 @@ public class ECSVParser {
      * Move field iteration forward.
      */
     private void moveForward() {
-        currentField = fieldsIter.next();
+        if (fieldsIter.hasNext()) {
+            currentField = fieldsIter.next();
+        }
     }
     
     /**
