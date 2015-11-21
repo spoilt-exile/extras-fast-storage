@@ -19,6 +19,8 @@
 
 package tk.freaxsoftware.extras.faststorage.reading;
 
+import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
+
 /**
  * Parsing exception class.
  * @author Stanislav Nepochatov
@@ -36,13 +38,26 @@ public class ParseException extends RuntimeException {
     private final String errorString;
     
     /**
-     * Default constructor.
+     * Compatibility constructor.
      * @param message short message about exceptional situation;
      * @param error raw entity string;
      * @param position current position of parser;
      */
     public ParseException(String message, String error, int position) {
-        super(message);
+        super(message + " - " + error + " = " + position);
+        errorPosition = position;
+        errorString = error;
+    }
+    
+    /**
+     * Default constructor.
+     * @param message short message about exceptional situation;
+     * @param error raw entity string;
+     * @param position current position of parser;
+     * @param field field instance from definition where error occurred;
+     */
+    public ParseException(String message, String error, int position, ECSVFields field) {
+        super(message + " - " + error + " = " + position + " on " + field.name());
         errorPosition = position;
         errorString = error;
     }
