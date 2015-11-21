@@ -133,8 +133,8 @@ public class ExampleDirectory implements ECSVAble<Integer> {
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_STRING)
-                .addArray(ECSVFields.PR_WORD)
-                .addMap(ECSVFields.PR_WORD, ECSVFields.PR_BOOLEAN);
+                .addArray(null)
+                .addMap(null, ECSVDefinition.CONVERTER_BOOLEAN);
     }
 
     @Override
