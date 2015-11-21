@@ -37,6 +37,7 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 /**
  * Default implementation of entity writer.
  * @author Stanislav Nepochatov
+ * @param <K>
  */
 public class EntityWriterImpl<K> implements EntityWriter<K> {
     
@@ -62,8 +63,8 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     
     /**
      * Default constructor.
-     * @param definition 
-     * @param buffer 
+     * @param definition fields definition from entity;
+     * @param buffer string buffer for writing;
      */
     public EntityWriterImpl(ECSVDefinition definition, StringBuffer buffer) {
         this.definition = definition;
@@ -184,10 +185,12 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeArray(List array) {
         checkField(ECSVFields.CX_ARRAY);
         buffer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
+        ECSVDefinition.ECSVFieldArray arrayField = (ECSVDefinition.ECSVFieldArray) currentField;
+        ECSVDefinition.FieldConverter converter = arrayField.getTypeConverter();
         ListIterator arrayIter = array.listIterator();
         while (arrayIter.hasNext()) {
             Object element = arrayIter.next();
-            buffer.append(element.toString());
+            buffer.append(converter != null ? converter.convertTo(element) : element.toString());
             if (arrayIter.hasNext()) {
                 buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
             }
@@ -200,12 +203,15 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeMap(Map map) {
         checkField(ECSVFields.CX_MAP);
         buffer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
+        ECSVDefinition.ECSVFIeldMap mapField = (ECSVDefinition.ECSVFIeldMap) currentField;
+        ECSVDefinition.FieldConverter keyConverter = mapField.getKeyConverter();
+        ECSVDefinition.FieldConverter valueConverter = mapField.getValueConverter();
         Iterator<Map.Entry> mapIterator = map.entrySet().iterator();
         while (mapIterator.hasNext()) {
             Map.Entry entry = mapIterator.next();
-            buffer.append(entry.getKey().toString());
+            buffer.append(keyConverter != null ? keyConverter.convertTo(entry.getKey()) : entry.getKey().toString());
             buffer.append(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
-            buffer.append(entry.getValue().toString());
+            buffer.append(keyConverter != null ? keyConverter.convertTo(entry.getValue()) : entry.getValue().toString());
             if (mapIterator.hasNext()) {
                 buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
             }
