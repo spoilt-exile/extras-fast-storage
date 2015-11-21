@@ -78,6 +78,9 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
      */
     private String currentParsed;
     
+    /**
+     * Flag which defines is ready reader or not.
+     */
     private Boolean readyToRead = false;
     
     public EntityReaderImpl(ECSVDefinition defintion, String rawEntityString) {
@@ -102,7 +105,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     /**
      * Checks state of reader and field reading order. Throws unchecked 
      * {@code EntityStateException} if order of writing messed up or reader not initiated;
-     * @param field 
+     * @param field field to check;
      */
     private void checkFieldAndState(ECSVFields field) {
         if (!readyToRead) {
@@ -112,9 +115,16 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         }
     }
     
+    /**
+     * Move iteration stack forward.
+     */
     private void moveForward() {
-        currentField = this.fieldIterator.next();
-        currentParsed = this.parsedIter.next();
+        if (fieldIterator.hasNext()) {
+            currentField = this.fieldIterator.next();
+        }
+        if (parsedIter.hasNext()) {
+            currentParsed = this.parsedIter.next();
+        }
     }
 
     @Override
