@@ -63,10 +63,19 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
      */
     private ECSVDefinition.ECSVFieldPrimitive currentField;
     
+    /**
+     * List of parsed strings.
+     */
     private List<String> parsedStrings;
     
+    /**
+     * Iterator through parsed strings.
+     */
     private ListIterator<String> parsedIter;
     
+    /**
+     * Current string for reading.
+     */
     private String currentParsed;
     
     private Boolean readyToRead = false;
@@ -84,7 +93,10 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
      * @param rawString raw entity string form;
      */
     private void parseInit(String rawString) {
-        
+        ECSVParser parser = new ECSVParser(definition);
+        parsedStrings = parser.parseEntity(rawString);
+        parsedIter = parsedStrings.listIterator();
+        currentParsed = parsedIter.next();
     }
     
     /**

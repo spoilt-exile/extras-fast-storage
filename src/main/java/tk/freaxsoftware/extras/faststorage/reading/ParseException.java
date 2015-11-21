@@ -21,24 +21,24 @@ package tk.freaxsoftware.extras.faststorage.reading;
 
 /**
  * Parsing exception class.
- * @author spoilt
- * @deprecated check new exception in v2
+ * @author Stanislav Nepochatov
  */
-public class ParseException extends Exception {
+public class ParseException extends RuntimeException {
     
     /**
      * Position of parser cursor where error occurred.
      */
-    private int errorPosition;
+    private final int errorPosition;
     
     /**
      * String of data which can't be parsed.
      */
-    private String errorString;
+    private final String errorString;
     
     /**
      * Default constructor.
      * @param message short message about exceptional situation;
+     * @param error raw entity string;
      * @param position current position of parser;
      */
     public ParseException(String message, String error, int position) {
