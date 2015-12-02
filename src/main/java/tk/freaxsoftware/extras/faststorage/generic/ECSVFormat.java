@@ -100,4 +100,9 @@ public final class ECSVFormat {
      */
     public static final char INTERNAL_DEFAULT_SEPARATOR = '$';
     
+    /**
+     * Default separation expression for split operation in internal entity array.
+     */
+    public static final String INTERNAL_DEFAULT_SEPARATOR_EXPR = "\\$";
+    
 }

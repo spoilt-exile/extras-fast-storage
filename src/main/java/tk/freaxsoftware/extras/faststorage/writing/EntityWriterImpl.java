@@ -236,7 +236,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
         buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
         ECSVDefinition.ECSVFieldInternal internalField = (ECSVDefinition.ECSVFieldInternal) currentField;
         if (!entityArray.isEmpty()) {
-            EntityHandler handler = Handlers.getHandlerByClass(entityArray.get(0).getClass());
+            EntityHandler handler = Handlers.getHandlerByClass(internalField.getEntityClass());
             ListIterator<E> entityIter = entityArray.listIterator();
             while (entityIter.hasNext()) {
                 E entity = entityIter.next();

@@ -325,10 +325,10 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
 
     @Override
     public <E extends ECSVAble> List<E> readInternalArray(Class<E> entityInternalClass) {
-        checkFieldAndState(ECSVFields.CX_INTERNAL);
+        checkFieldAndState(ECSVFields.CX_INTERNAL_ARRAY);
         ECSVDefinition.ECSVFieldInternal internalField = (ECSVDefinition.ECSVFieldInternal) currentField;
         Class internalEntityClass = internalField.getEntityClass();
-        String separator = internalField.getSeparator();
+        String separator = internalField.getSeparatorExpr();
         String internalEntitiesValue = currentParsed;
         moveForward();
         EntityHandler handler = Handlers.getHandlerByClass(internalEntityClass);

@@ -24,11 +24,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
+import tk.freaxsoftware.extras.faststorage.example.ExamplePermission;
+import tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler;
+import static tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler.TYPE;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
 import tk.freaxsoftware.extras.faststorage.reading.ParseException;
+import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 
 /**
  * Parsing test run.
@@ -48,9 +53,12 @@ public class EntityReaderTest {
             assertNotNull(example.getName());
             assertNotNull(example.getParentName());
             assertNotNull(example.getDescription());
-            assertNotNull(example.getMarks());
             assertNotNull(example.getPermissions());
         }
     }
     
+    @Before
+    public void initHandler() {
+        Handlers.registerHandler(TYPE, ExamplePermission.class, new ExamplePermissionHandler());
+    }
 }

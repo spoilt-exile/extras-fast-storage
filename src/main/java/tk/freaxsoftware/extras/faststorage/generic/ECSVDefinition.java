@@ -195,10 +195,11 @@ public class ECSVDefinition {
      * @param <E> internal entity type generic;
      * @param internalClass internal entity type class;
      * @param entitySeparator separation char which used for entity separation within stream;
+     * @param entitySeparatorExpr additional separator regular expression for correct splitting;
      * @return instance;
      */
-    public <E extends ECSVAble> ECSVDefinition addInternalArray(Class<E> internalClass, char entitySeparator) {
-        fields.add(new ECSVFieldInternal(internalClass, entitySeparator));
+    public <E extends ECSVAble> ECSVDefinition addInternalArray(Class<E> internalClass, String entitySeparator, String entitySeparatorExpr) {
+        fields.add(new ECSVFieldInternal(internalClass, entitySeparator, entitySeparatorExpr));
         return this;
     }
     
@@ -349,6 +350,8 @@ public class ECSVDefinition {
         private final Class<E> entityClass;
         
         private final String separator;
+        
+        private final String separatorExpr;
 
         /**
          * Simple internal constructor.
@@ -358,6 +361,7 @@ public class ECSVDefinition {
             super(ECSVFields.CX_INTERNAL);
             entityClass = givenEntityClass;
             separator = null;
+            separatorExpr = null;
         }
         
         /**
@@ -365,10 +369,11 @@ public class ECSVDefinition {
          * @param givenEntityClass entity class;
          * @param givenSeparator separator char for packing array into string;
          */
-        public ECSVFieldInternal(Class<E> givenEntityClass, char givenSeparator) {
+        public ECSVFieldInternal(Class<E> givenEntityClass, String givenSeparator, String givenSeparatorExpr) {
             super(ECSVFields.CX_INTERNAL_ARRAY);
             entityClass = givenEntityClass;
-            separator = String.valueOf(givenSeparator);
+            separator = givenSeparator;
+            separatorExpr = givenSeparatorExpr;
         }
 
         public Class<E> getEntityClass() {
@@ -377,6 +382,13 @@ public class ECSVDefinition {
 
         public String getSeparator() {
             return separator;
+        }
+
+        public String getSeparatorExpr() {
+            if (separatorExpr == null) {
+                return separator;
+            }
+            return separatorExpr;
         }
     }
     

@@ -22,12 +22,15 @@ package tk.freaxsoftware.extras.faststorage.test;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import org.junit.Before;
 import org.junit.Test;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
+import tk.freaxsoftware.extras.faststorage.example.ExamplePermission;
+import tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler;
+import static tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler.TYPE;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
+import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 import tk.freaxsoftware.extras.faststorage.writing.Packer;
@@ -44,11 +47,11 @@ public class EntityWriterTest {
         Packer<ExampleDirectory> packer = new StandardPacker();
         
         List<ExampleDirectory> dirList = new ArrayList<>();
-        dirList.add(makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"hide", "red"}, new String[] {"Tom", "Joe"}));
-        dirList.add(makeExampleDirectory(1, "Private", "Root", "My private files", new String[] {"private", "blue"}, new String[] {"Tom", "Joe", "Micky"}));
-        dirList.add(makeExampleDirectory(2, "Images", "Private", "My photos and etc.", new String[] {"private", "green"}, new String[] {"Jackob"}));
-        dirList.add(makeExampleDirectory(3, "Video", "Private", "My movies.", new String[] {"shared", "red"}, new String[] {"Admin"}));
-        dirList.add(makeExampleDirectory(4, "Src", "Private", "Source files of some evil program!", new String[] {"hide", "black"}, new String[] {"Tom", "Joe"}));
+        dirList.add(makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"Tom", "Joe"}));
+        dirList.add(makeExampleDirectory(1, "Private", "Root", "My private files", new String[] {"Tom", "Joe", "Micky"}));
+        dirList.add(makeExampleDirectory(2, "Images", "Private", "My photos and etc.", new String[] {"Jackob"}));
+        dirList.add(makeExampleDirectory(3, "Video", "Private", "My movies.", new String[] {"Admin"}));
+        dirList.add(makeExampleDirectory(4, "Src", "Private", "Source files of some evil program!", new String[] {"Tom", "Joe"}));
         
         FileWriter writer = new FileWriter("test-pack.ecsv");
         
@@ -62,24 +65,24 @@ public class EntityWriterTest {
         writer.close();
     }
     
-    private ExampleDirectory makeExampleDirectory(Integer id, String name, String parent, String desc, String[] marks, String[] permNames) {
+    private ExampleDirectory makeExampleDirectory(Integer id, String name, String parent, String desc, String[] permNames) {
         ExampleDirectory dir1 = new ExampleDirectory();
         dir1.setId(id);
         dir1.setName(name);
         dir1.setParentName(parent);
         dir1.setDescription(desc);
-        List<String> marksList = new ArrayList<>(marks.length);
-        for (String mark: marks) {
-            marksList.add(mark);
-        }
-        dir1.setMarks(marksList);
-        Map<String, Boolean> perms1 = new HashMap<>();
+
+        List<ExamplePermission> permissions = new ArrayList<>(permNames.length);
         for (String permName: permNames) {
-            perms1.put(permName, Boolean.FALSE);
+            permissions.add(new ExamplePermission(permName, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, 24));
         }
-        dir1.setPermissions(perms1);
+        dir1.setPermissions(permissions);
         
         return dir1;
     }
     
+    @Before
+    public void initHandler() {
+        Handlers.registerHandler(TYPE, ExamplePermission.class, new ExamplePermissionHandler());
+    }
 }

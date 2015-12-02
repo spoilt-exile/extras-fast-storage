@@ -20,10 +20,10 @@
 package tk.freaxsoftware.extras.faststorage.example;
 
 import java.util.List;
-import java.util.Map;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 
@@ -43,9 +43,7 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     
     private String description;
     
-    private List<String> marks;
-    
-    private Map<String, Boolean> permissions;
+    private List<ExamplePermission> permissions;
 
     public Integer getId() {
         return id;
@@ -97,31 +95,11 @@ public class ExampleDirectory implements ECSVAble<Integer> {
         this.description = description;
     }
 
-    /**
-     * @return the marks
-     */
-    public List<String> getMarks() {
-        return marks;
-    }
-
-    /**
-     * @param marks the marks to set
-     */
-    public void setMarks(List<String> marks) {
-        this.marks = marks;
-    }
-
-    /**
-     * @return the permissions
-     */
-    public Map<String, Boolean> getPermissions() {
+    public List<ExamplePermission> getPermissions() {
         return permissions;
     }
 
-    /**
-     * @param permissions the permissions to set
-     */
-    public void setPermissions(Map<String, Boolean> permissions) {
+    public void setPermissions(List<ExamplePermission> permissions) {
         this.permissions = permissions;
     }
 
@@ -133,8 +111,7 @@ public class ExampleDirectory implements ECSVAble<Integer> {
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_STRING)
-                .addArray(null)
-                .addMap(null, ECSVDefinition.CONVERTER_BOOLEAN);
+                .addInternalArray(ExamplePermission.class, String.valueOf(ECSVFormat.INTERNAL_DEFAULT_SEPARATOR), ECSVFormat.INTERNAL_DEFAULT_SEPARATOR_EXPR);
     }
 
     @Override
@@ -144,8 +121,7 @@ public class ExampleDirectory implements ECSVAble<Integer> {
         this.name = reader.readWord();
         this.parentName = reader.readWord();
         this.description = reader.readString();
-        this.marks = (List<String>) reader.readArray();
-        this.permissions = (Map<String, Boolean>) reader.readMap();
+        this.permissions = reader.readInternalArray(ExamplePermission.class);
     }
 
     @Override
@@ -155,8 +131,7 @@ public class ExampleDirectory implements ECSVAble<Integer> {
         writer.writeWord(name);
         writer.writeWord(parentName);
         writer.writeString(description);
-        writer.writeArray(marks);
-        writer.writeMap(permissions);
+        writer.writeInternalArray(permissions);
     }
 
     @Override
