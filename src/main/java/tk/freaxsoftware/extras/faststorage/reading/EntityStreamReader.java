@@ -21,46 +21,38 @@ package tk.freaxsoftware.extras.faststorage.reading;
 
 import java.io.Reader;
 import java.util.List;
+import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 
 /**
  * Parser main interface.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
- * @deprecated replaced by ECSVStorage
  * @see tk.freaxsoftware.extras.faststorage.storage.ECSVStorage
  */
-public interface Parser<E extends ECSVAble> {
-    
-    /**
-     * Read entity from specified single line.
-     * @param rawEntity string representation of entity;
-     * @return inited entity;
-     * @throws org.devnote.libecsvparser.parsing.ParseException if parse failed;
-     */
-    public E readEntity(String rawEntity, Boolean extractType) throws InstantiationException, IllegalAccessException, ParseException;
+public interface EntityStreamReader<E extends ECSVAble> {
     
     /**
      * Read entities from multiline string.
      * @param rawEntities string with entities separated by UNIX line break;
      * @return parsed entities;
-     * @throws org.devnote.libecsvparser.parsing.ParseException if parse failed;
+     * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
      */
-    public List<E> readEntities(String rawEntities, Boolean extractType) throws InstantiationException, IllegalAccessException, ParseException;
+    public List<E> readEntities(String rawEntities) throws EntityProcessingException;
     
     /**
      * Read entities from multiline string.
      * @param rawEntities list with entities strings;
      * @return parsed entities;
-     * @throws org.devnote.libecsvparser.parsing.ParseException if parse failed;
+     * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
      */
-    public List<E> readEntities(List<String> rawEntities, Boolean extractType) throws InstantiationException, IllegalAccessException, ParseException;
+    public List<E> readEntities(List<String> rawEntities) throws EntityProcessingException;
     
     /**
      * Read entities from multiline string.
      * @param entityReader reader to read entities;
      * @return parsed entities;
-     * @throws org.devnote.libecsvparser.parsing.ParseException if parse failed;
+     * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
      */
-    public List<E> readEntities(Reader entityReader, Boolean extractType) throws InstantiationException, IllegalAccessException, ParseException;
+    public List<E> readEntities(Reader entityReader) throws EntityProcessingException;
 }

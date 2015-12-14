@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,8 +31,10 @@ import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
 import tk.freaxsoftware.extras.faststorage.example.ExamplePermission;
 import tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler;
 import static tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler.TYPE;
+import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
+import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReaderImpl;
 import tk.freaxsoftware.extras.faststorage.reading.ParseException;
 import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 
@@ -54,6 +57,19 @@ public class EntityReaderTest {
             assertNotNull(example.getParentName());
             assertNotNull(example.getDescription());
             assertNotNull(example.getPermissions());
+        }
+    }
+    
+    @Test
+    public void parseStream() throws FileNotFoundException, EntityProcessingException {
+        List<ExampleDirectory> enteties = new EntityStreamReaderImpl<ExampleDirectory, String>(ExampleDirectory.class, new ExampleDirectory().getDefinition())
+                .readEntities(new FileReader("test-parse.ecsv"));
+        for (ExampleDirectory entity: enteties) {
+            assertNotNull(entity.getId());
+            assertNotNull(entity.getName());
+            assertNotNull(entity.getParentName());
+            assertNotNull(entity.getDescription());
+            assertNotNull(entity.getPermissions());
         }
     }
     
