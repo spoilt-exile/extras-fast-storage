@@ -31,7 +31,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
 
 /**
- * Standard parser implementation.
+ * Entity stream reader implementation.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
  */

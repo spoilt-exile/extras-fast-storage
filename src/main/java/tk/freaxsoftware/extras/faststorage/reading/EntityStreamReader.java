@@ -25,7 +25,8 @@ import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 
 /**
- * Parser main interface.
+ * Entity stream reader interface. For reading some list of enteties from raw multiline 
+ * string, list of strings or reader.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
  * @see tk.freaxsoftware.extras.faststorage.storage.ECSVStorage
@@ -41,7 +42,7 @@ public interface EntityStreamReader<E extends ECSVAble> {
     public List<E> readEntities(String rawEntities) throws EntityProcessingException;
     
     /**
-     * Read entities from multiline string.
+     * Read entities from list of strings.
      * @param rawEntities list with entities strings;
      * @return parsed entities;
      * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
@@ -49,7 +50,7 @@ public interface EntityStreamReader<E extends ECSVAble> {
     public List<E> readEntities(List<String> rawEntities) throws EntityProcessingException;
     
     /**
-     * Read entities from multiline string.
+     * Read entities from reader.
      * @param entityReader reader to read entities;
      * @return parsed entities;
      * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
