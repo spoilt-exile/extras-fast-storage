@@ -29,10 +29,8 @@ import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
 import tk.freaxsoftware.extras.faststorage.example.ExamplePermission;
 import tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler;
 import static tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler.TYPE;
-import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
+import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.storage.Handlers;
-import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
-import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriterImpl;
 
@@ -43,8 +41,8 @@ import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriterImpl;
 public class EntityWriterTest {
     
     @Test
-    public void packTest() throws IOException {
-        EntityStreamWriter<ExampleDirectory> packer = new EntityStreamWriterImpl();
+    public void packTest() throws IOException, EntityProcessingException {
+        EntityStreamWriter<ExampleDirectory> entityWriter = new EntityStreamWriterImpl(new ExampleDirectory().getDefinition());
         
         List<ExampleDirectory> dirList = new ArrayList<>();
         dirList.add(makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"Tom", "Joe"}));
@@ -54,14 +52,8 @@ public class EntityWriterTest {
         dirList.add(makeExampleDirectory(4, "Src", "Private", "Source files of some evil program!", new String[] {"Tom", "Joe"}));
         
         FileWriter writer = new FileWriter("test-pack.ecsv");
-        
-        StringBuffer entityBuffer = new StringBuffer();
-        for (ExampleDirectory dir: dirList) {
-            EntityWriter entityWriter = new EntityWriterImpl(dir.getDefinition(), entityBuffer);
-            dir.writeToECSV(entityWriter);
-            entityBuffer.append(ECSVFormat.LINE_BREAK_CHAR);
-        }
-        writer.write(entityBuffer.toString());
+        entityWriter.writeEntities(dirList, writer);
+        writer.flush();
         writer.close();
     }
     

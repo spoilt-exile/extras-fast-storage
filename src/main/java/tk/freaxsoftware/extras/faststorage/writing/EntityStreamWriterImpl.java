@@ -27,6 +27,7 @@ import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStateException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
 
 /**
  * Entity stream writer implementation.
@@ -62,6 +63,7 @@ public class EntityStreamWriterImpl<E extends ECSVAble, K> implements EntityStre
             for (E entity: entities) {
                 EntityWriter<K> writer = new EntityWriterImpl<>(this.entityDefinition, buffer);
                 entity.writeToECSV(writer);
+                buffer.append(ECSVFormat.LINE_BREAK_CHAR);
             }
             entityWriter.write(buffer.toString());
         } catch (IOException ioex) {
