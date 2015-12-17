@@ -18,33 +18,32 @@
  */
 package tk.freaxsoftware.extras.faststorage.writing;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 
 /**
- * Entity packer interface.
+ * Entity stream writer interface. For writing list of entities in string or writer.
  * @author Stanislav Nepochatov
  * @param <E> all ECSVAble successors;
- * @deprecated 
  */
-public interface Packer<E extends ECSVAble> {
+public interface EntityStreamWriter<E extends ECSVAble> {
     
     /**
-     * Pack list of entities.
-     * @param entities entities to pack;
-     * @param appendTypes append type of entity to data;
+     * Write entities into multiline string.
+     * @param entities entities to write;
      * @return multiline string with entities;
+     * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
      */
-    public String packEntities(List<E> entities, Boolean appendTypes);
+    public String writeEntities(List<E> entities) throws EntityProcessingException;
     
     /**
-     * Pack list of entities.
-     * @param entities entities to pack;
-     * @param appendTypes append type of entity to data;
+     * Write entities to writer.
+     * @param entities entities to write;
      * @param entityWriter writer for result writing;
+     * @throws tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException
      */
-    public void packEntities(List<E> entities, Boolean appendTypes, Writer entityWriter) throws IOException;
+    public void writeEntities(List<E> entities, Writer entityWriter) throws EntityProcessingException;
     
 }

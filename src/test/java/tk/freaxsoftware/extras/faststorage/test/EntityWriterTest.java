@@ -33,8 +33,8 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
 import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
-import tk.freaxsoftware.extras.faststorage.writing.Packer;
-import tk.freaxsoftware.extras.faststorage.writing.StandardPacker;
+import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriter;
+import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriterImpl;
 
 /**
  * Entity writing test.
@@ -44,7 +44,7 @@ public class EntityWriterTest {
     
     @Test
     public void packTest() throws IOException {
-        Packer<ExampleDirectory> packer = new StandardPacker();
+        EntityStreamWriter<ExampleDirectory> packer = new EntityStreamWriterImpl();
         
         List<ExampleDirectory> dirList = new ArrayList<>();
         dirList.add(makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"Tom", "Joe"}));
