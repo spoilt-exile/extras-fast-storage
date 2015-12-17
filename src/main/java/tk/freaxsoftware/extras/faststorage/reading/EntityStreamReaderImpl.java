@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.IOException;
 import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
+import tk.freaxsoftware.extras.faststorage.exception.EntityStateException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
@@ -68,6 +69,8 @@ public class EntityStreamReaderImpl<E extends ECSVAble, K> implements EntityStre
             return readEntetiesInternal(rawEntities);
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new EntityProcessingException("Error during creation of entity instance, please check public availability of constructor.", ex);
+        } catch (EntityStateException esex) {
+            throw new EntityProcessingException("Unable to read entity", esex);
         }
     }
 
