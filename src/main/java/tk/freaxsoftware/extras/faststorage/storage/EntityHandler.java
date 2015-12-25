@@ -30,7 +30,13 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
  * @param <E> entity type generic;
  * @param <K> entity key type generic;
  */
-public interface EntityHandler<E extends ECSVAble<K>, K> extends ECSVStorage<E, K> {
+public interface EntityHandler<E extends ECSVAble<K>, K> extends EntityStorage<E, K> {
+    
+    /**
+     * Entity factory method.
+     * @return new empty entity;
+     */
+    E getNewEntity();
     
     /**
      * Get type of entity which supports handler.
