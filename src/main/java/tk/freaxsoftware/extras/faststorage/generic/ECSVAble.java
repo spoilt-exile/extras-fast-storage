@@ -24,6 +24,7 @@ import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 
 /**
  * Interface with some util methods for object serialization/deserialization with ECSV format.
+ * @param <K> entity key;
  * @author Stanislav Nepochatov
  */
 public interface ECSVAble<K> {
@@ -51,4 +52,10 @@ public interface ECSVAble<K> {
      * @param writer helper object to entity writing;
      */
     void writeToECSV(EntityWriter<K> writer);
+    
+    /**
+     * Update current entity with updated copy.
+     * @param updatedEntity copy of entity with updated data except key;
+     */
+    void update(ECSVAble<K> updatedEntity);
 }

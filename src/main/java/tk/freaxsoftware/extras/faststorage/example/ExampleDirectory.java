@@ -138,4 +138,15 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     public Integer getKey() {
         return this.id;
     }
+
+    @Override
+    public void update(ECSVAble<Integer> updatedEntity) {
+        if (updatedEntity instanceof ExampleDirectory) {
+            ExampleDirectory updatedDirectory = (ExampleDirectory) updatedEntity;
+            this.setName(updatedDirectory.getName());
+            this.setParentName(updatedDirectory.getParentName());
+            this.setDescription(updatedDirectory.getDescription());
+            this.setPermissions(updatedDirectory.getPermissions());
+        }
+    }
 }

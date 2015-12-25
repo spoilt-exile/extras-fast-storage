@@ -122,5 +122,10 @@ public class ExamplePermission implements ECSVAble<Object> {
         writer.writeBoolean(canDelete);
         writer.writeInteger(mode);
     }
+
+    @Override
+    public void update(ECSVAble<Object> updatedEntity) {
+        //Example permission doesn't have storage, then update method may be empty.
+    }
     
 }
