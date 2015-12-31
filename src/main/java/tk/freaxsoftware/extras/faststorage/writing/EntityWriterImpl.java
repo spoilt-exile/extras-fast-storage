@@ -154,7 +154,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeDate(Date date) {
         checkField(ECSVFields.SC_DATE);
         ECSVDefinition.ECSVFieldDate dateField = (ECSVDefinition.ECSVFieldDate) currentField;
+        buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
         buffer.append(new SimpleDateFormat(dateField.getDateFormat()).format(date));
+        buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         moveForward();
     }
 
