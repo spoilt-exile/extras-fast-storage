@@ -21,6 +21,7 @@ package tk.freaxsoftware.extras.faststorage.storage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,13 @@ import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
 import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReaderImpl;
+import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriter;
+import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriterImpl;
+import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
+import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 
 /**
  * Abstract entity storage implementation. Basic implementation for storing 
@@ -101,16 +107,52 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
     
     /**
      * Append entity record to end of storage resource. Should be called inside sync block.
+     * @param entity new created entity;
      */
     protected void appendEntityToStore(E entity) {
-        
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(path, true);
+            StringBuffer buffer = new StringBuffer();
+            EntityWriter entityWriter = new EntityWriterImpl(entityDefinition, buffer);
+            entity.writeToECSV(entityWriter);
+            writer.write(buffer.toString());
+            writer.append(ECSVFormat.LINE_BREAK_CHAR);
+            writer.flush();
+            writer.close();
+        } catch (IOException ioex) {
+            throw new EntityStoreException("Storage IOException at appending: " + path, ioex);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ioex) {}
+            }
+        }
     }
     
     /**
      * Save entire storage to resource. Should be called inside sync block.
      */
     protected void saveEntitiesToStore() {
-        
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(path);
+            EntityStreamWriter<E> entityStreamWriter = new EntityStreamWriterImpl<>(entityDefinition);
+            entityStreamWriter.writeEntities(entitiesStore, writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException ioex) {
+            throw new EntityStoreException("Storage IOException at saving: " + path, ioex);
+        } catch (EntityProcessingException pex) {
+            throw new EntityStoreException("Error during processing of entities", pex);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ioex) {}
+            }
+        }
     }
 
     @Override
