@@ -125,7 +125,10 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
     public void update(E entity) {
         E findedEntity = get(entity.getKey());
         if (findedEntity != null) {
-            findedEntity.update(entity);
+            //Don't call update() if changes occurred in the same entity instance.
+            if (findedEntity != entity) {
+                findedEntity.update(entity);
+            }
             saveEntitiesToStore();
         }
     }
