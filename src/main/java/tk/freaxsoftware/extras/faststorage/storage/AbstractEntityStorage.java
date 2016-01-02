@@ -19,6 +19,7 @@
 package tk.freaxsoftware.extras.faststorage.storage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -86,20 +87,34 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
      */
     protected List<E> readEntitiesFromStore() {
         List<E> readedEntities = null;
-        BufferedReader reader = null;
+        File storageFile = new File(path);
+        Boolean fileExsists = false;
         try {
-            reader = new BufferedReader(new FileReader(path));
-            EntityStreamReader<E> entityReader = new EntityStreamReaderImpl<>(entityClass, entityDefinition);
-            readedEntities = entityReader.readEntities(reader);
-        } catch (FileNotFoundException fex) {
-            throw new EntityStoreException("File not found: " + path, fex);
-        } catch (EntityProcessingException pex) {
-            throw new EntityStoreException("Error during processing of entities", pex);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ioex) {}
+            if (!storageFile.exists()) {
+                storageFile.createNewFile();
+                fileExsists = true;
+            } else {
+                fileExsists = true;
+            }
+        } catch (IOException ioex) {
+            throw new EntityStoreException("Can't create new entity file: " + path, ioex);
+        }
+        BufferedReader reader = null;
+        if (fileExsists) {
+            try {
+                reader = new BufferedReader(new FileReader(storageFile));
+                EntityStreamReader<E> entityReader = new EntityStreamReaderImpl<>(entityClass, entityDefinition);
+                readedEntities = entityReader.readEntities(reader);
+            } catch (FileNotFoundException fex) {
+                throw new EntityStoreException("File not found: " + path, fex);
+            } catch (EntityProcessingException pex) {
+                throw new EntityStoreException("Error during processing of entities", pex);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException ioex) {}
+                }
             }
         }
         return readedEntities == null ? new ArrayList<E>() : readedEntities;
@@ -157,6 +172,12 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
 
     @Override
     public void create(E entity) {
+        if (entity.getKey() == null) {
+            entity.setKey(getNewKey());
+            if (entity.getKey() == null) {
+                throw new EntityStoreException("Can't store entity without key: " + entity.toString() , null);
+            }
+        }
         synchronized(entitiesLock) {
             entitiesStore.add(entity);
             appendEntityToStore(entity);

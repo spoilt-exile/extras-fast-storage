@@ -35,6 +35,16 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     
     public static final String TYPE = "DIR";
     
+    public static final ECSVDefinition DEFINITION = ECSVDefinition.createNew()
+                .addPrimitive(ECSVFields.TYPE)
+                .addKey(Integer.class)
+                .addPrimitive(ECSVFields.PR_WORD)
+                .addPrimitive(ECSVFields.PR_WORD)
+                .addPrimitive(ECSVFields.PR_STRING)
+                .addInternalArray(ExamplePermission.class, 
+                        String.valueOf(ECSVFormat.INTERNAL_DEFAULT_SEPARATOR), 
+                        ECSVFormat.INTERNAL_DEFAULT_SEPARATOR_EXPR);
+    
     private Integer id;
     
     private String name;
@@ -138,6 +148,11 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     public Integer getKey() {
         return this.id;
     }
+    
+    @Override
+    public void setKey(Integer key) {
+        //Do nothing
+    }
 
     @Override
     public void update(ECSVAble<Integer> updatedEntity) {
@@ -148,5 +163,10 @@ public class ExampleDirectory implements ECSVAble<Integer> {
             this.setDescription(updatedDirectory.getDescription());
             this.setPermissions(updatedDirectory.getPermissions());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ExampleDirectory{" + "id=" + id + ", name=" + name + ", parentName=" + parentName + ", description=" + description + '}';
     }
 }

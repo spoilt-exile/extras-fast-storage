@@ -45,11 +45,11 @@ public class EntityWriterTest {
         EntityStreamWriter<ExampleDirectory> entityWriter = new EntityStreamWriterImpl(new ExampleDirectory().getDefinition());
         
         List<ExampleDirectory> dirList = new ArrayList<>();
-        dirList.add(makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"Tom", "Joe"}));
-        dirList.add(makeExampleDirectory(1, "Private", "Root", "My private files", new String[] {"Tom", "Joe", "Micky"}));
-        dirList.add(makeExampleDirectory(2, "Images", "Private", "My photos and etc.", new String[] {"Jackob"}));
-        dirList.add(makeExampleDirectory(3, "Video", "Private", "My movies.", new String[] {"Admin"}));
-        dirList.add(makeExampleDirectory(4, "Src", "Private", "Source files of some evil program!", new String[] {"Tom", "Joe"}));
+        dirList.add(ExampleDirectoryTestFactory.makeExampleDirectory(0, "Root", null, "Root directory", new String[] {"Tom", "Joe"}));
+        dirList.add(ExampleDirectoryTestFactory.makeExampleDirectory(1, "Private", "Root", "My private files", new String[] {"Tom", "Joe", "Micky"}));
+        dirList.add(ExampleDirectoryTestFactory.makeExampleDirectory(2, "Images", "Private", "My photos and etc.", new String[] {"Jackob"}));
+        dirList.add(ExampleDirectoryTestFactory.makeExampleDirectory(3, "Video", "Private", "My movies.", new String[] {"Admin"}));
+        dirList.add(ExampleDirectoryTestFactory.makeExampleDirectory(4, "Src", "Private", "Source files of some evil program!", new String[] {"Tom", "Joe"}));
         
         FileWriter writer = new FileWriter("test-pack.ecsv");
         entityWriter.writeEntities(dirList, writer);
@@ -57,21 +57,7 @@ public class EntityWriterTest {
         writer.close();
     }
     
-    private ExampleDirectory makeExampleDirectory(Integer id, String name, String parent, String desc, String[] permNames) {
-        ExampleDirectory dir1 = new ExampleDirectory();
-        dir1.setId(id);
-        dir1.setName(name);
-        dir1.setParentName(parent);
-        dir1.setDescription(desc);
 
-        List<ExamplePermission> permissions = new ArrayList<>(permNames.length);
-        for (String permName: permNames) {
-            permissions.add(new ExamplePermission(permName, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, 24));
-        }
-        dir1.setPermissions(permissions);
-        
-        return dir1;
-    }
     
     @Before
     public void initHandler() {

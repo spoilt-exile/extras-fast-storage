@@ -94,6 +94,12 @@ public class ExamplePermission implements ECSVAble<Object> {
     public Object getKey() {
         return null;
     }
+    
+
+    @Override
+    public void setKey(Object key) {
+        //Do nothing
+    }
 
     @Override
     public ECSVDefinition getDefinition() {
@@ -126,6 +132,5 @@ public class ExamplePermission implements ECSVAble<Object> {
     @Override
     public void update(ECSVAble<Object> updatedEntity) {
         //Example permission doesn't have storage, then update method may be empty.
-    }
-    
+    }    
 }

@@ -36,6 +36,12 @@ public interface ECSVAble<K> {
     K getKey();
     
     /**
+     * Set entity key.
+     * @param key auto-generated key by storage;
+     */
+    void setKey(K key);
+    
+    /**
      * Get entity definition by fields.
      * @return fully inited definition of entity;
      */
