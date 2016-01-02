@@ -35,7 +35,7 @@ import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
 import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReaderImpl;
-import tk.freaxsoftware.extras.faststorage.reading.ParseException;
+import tk.freaxsoftware.extras.faststorage.exception.ECSVParseException;
 import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 
 /**
@@ -45,7 +45,7 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 public class EntityReaderTest {
     
     @Test
-    public void parseTest() throws FileNotFoundException, InstantiationException, IllegalAccessException, ParseException, IOException {
+    public void parseTest() throws FileNotFoundException, InstantiationException, IllegalAccessException, ECSVParseException, IOException {
         BufferedReader reader = new BufferedReader(new FileReader("test-parse.ecsv"));
         while (reader.ready()) {
             ExampleDirectory example = new ExampleDirectory();

@@ -18,6 +18,7 @@
  */
 package tk.freaxsoftware.extras.faststorage.reading;
 
+import tk.freaxsoftware.extras.faststorage.exception.ECSVParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -132,7 +133,7 @@ public class ECSVParser {
      * @return arraylist string of parsed words;
      * @throws tk.freaxsoftware.extras.faststorage.reading.ParseException
      */
-    public synchronized List<String> parseEntity(String entityLine) throws ParseException {
+    public synchronized List<String> parseEntity(String entityLine) throws ECSVParseException {
         String rawEntity;
         List<String> parsed = new ArrayList(defintion.getFields().size());
         if (currentField.getField() == ECSVFields.TYPE) {
@@ -166,7 +167,7 @@ public class ECSVParser {
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ParseException("Word validation faield, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("Word validation faield, format error!", rawEntity, index, currentField.getField());
                         }
                     }
                     break;
@@ -183,7 +184,7 @@ public class ECSVParser {
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ParseException("String validation failed, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("String validation failed, format error!", rawEntity, index, currentField.getField());
                         }
                     }
                     break;
@@ -198,7 +199,7 @@ public class ECSVParser {
                         if (validate(currentField.getField(), array)) {
                             parsed.add(array);
                         } else {
-                            throw new ParseException("Array validation failed, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("Array validation failed, format error!", rawEntity, index, currentField.getField());
                         }
                         moveForward();
                         beginSlice = index + 1;
@@ -218,7 +219,7 @@ public class ECSVParser {
                 if (validate(currentField.getField(), word)) {
                     parsed.add(word);
                 } else {
-                    throw new ParseException("Word validation failed, format error!", rawEntity, index, currentField.getField());
+                    throw new ECSVParseException("Word validation failed, format error!", rawEntity, index, currentField.getField());
                 }
                 moveForward();
                 break;
@@ -250,10 +251,10 @@ public class ECSVParser {
      * Parse key-value struct string<br>
      * for example: "TAG:ARG"
      * @param rawString string of entity;
-     * @throws ParseException if there is no separator;
+     * @throws ECSVParseException if there is no separator;
      * @return array with command and its arguments;
      */
-    private String[] parseKeyValue(String rawString) throws ParseException {
+    private String[] parseKeyValue(String rawString) throws ECSVParseException {
         String[] returnedArray = new String[2];
         Integer splitIndex = -1;
         for (Integer cursorIndex = 0; cursorIndex < rawString.length(); cursorIndex++) {
@@ -263,7 +264,7 @@ public class ECSVParser {
             }
         }
         if (splitIndex == -1) {
-            throw new ParseException("Given string is not key-value pair: " + rawString, rawString, splitIndex);
+            throw new ECSVParseException("Given string is not key-value pair: " + rawString, rawString, splitIndex);
         } else {
             returnedArray[0] = rawString.substring(0, splitIndex);
             returnedArray[1] = rawString.substring(splitIndex + 1);

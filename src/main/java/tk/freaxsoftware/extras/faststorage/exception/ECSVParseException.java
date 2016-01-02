@@ -17,7 +17,7 @@
  * License along with this library.
  */
 
-package tk.freaxsoftware.extras.faststorage.reading;
+package tk.freaxsoftware.extras.faststorage.exception;
 
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
 
@@ -25,7 +25,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
  * Parsing exception class.
  * @author Stanislav Nepochatov
  */
-public class ParseException extends RuntimeException {
+public class ECSVParseException extends RuntimeException {
     
     /**
      * Position of parser cursor where error occurred.
@@ -43,7 +43,7 @@ public class ParseException extends RuntimeException {
      * @param error raw entity string;
      * @param position current position of parser;
      */
-    public ParseException(String message, String error, int position) {
+    public ECSVParseException(String message, String error, int position) {
         super(message + " - " + error + " = " + position);
         errorPosition = position;
         errorString = error;
@@ -56,7 +56,7 @@ public class ParseException extends RuntimeException {
      * @param position current position of parser;
      * @param field field instance from definition where error occurred;
      */
-    public ParseException(String message, String error, int position, ECSVFields field) {
+    public ECSVParseException(String message, String error, int position, ECSVFields field) {
         super(message + " - " + error + " = " + position + " on " + field.name());
         errorPosition = position;
         errorString = error;
