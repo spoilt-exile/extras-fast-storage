@@ -24,7 +24,6 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
-import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 
@@ -35,10 +34,6 @@ import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 public class ExamplePermissionHandler implements EntityHandler<ExamplePermission, Object> {
     
     public static final String TYPE = "PERM";
-    
-    static {
-        Handlers.registerHandler(TYPE, ExamplePermission.class, new ExamplePermissionHandler());
-    }
     
     private final ExamplePermission reference = new ExamplePermission();
 

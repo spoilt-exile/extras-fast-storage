@@ -1,0 +1,2 @@
+DIR,{tk.freaxsoftware.extras.faststorage.example.ExampleDirectory},{tk.freaxsoftware.extras.faststorage.example.ExampleDirectoryHandler},test-pack.ecsv
+PERM,{tk.freaxsoftware.extras.faststorage.example.ExamplePermission},{tk.freaxsoftware.extras.faststorage.example.ExamplePermissionHandler},null

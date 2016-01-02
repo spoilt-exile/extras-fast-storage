@@ -37,7 +37,7 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 /**
  * Default implementation of entity writer.
  * @author Stanislav Nepochatov
- * @param <K>
+ * @param <K> entity key type generic;
  */
 public class EntityWriterImpl<K> implements EntityWriter<K> {
     
