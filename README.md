@@ -3,7 +3,7 @@ FastStorage
 
 Simple data storage based on CSV
 
-**Current version:** *2.0*
+**Current version:** *3.0*
 
 ECSV is an enhanced format based on CSV. Main killer-feature is basic array and key-value pairs supporting. This library providing default implementation of ECSV format parser and packer. Parser is for reading entities form string, packer otherwise pack entity to string.
 
