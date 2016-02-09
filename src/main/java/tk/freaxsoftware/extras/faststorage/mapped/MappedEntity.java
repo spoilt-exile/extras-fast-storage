@@ -18,6 +18,8 @@
  */
 package tk.freaxsoftware.extras.faststorage.mapped;
 
+import java.io.Reader;
+import java.io.Writer;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -122,4 +124,27 @@ public interface MappedEntity {
      */
     void removeAll();
     
+    /**
+     * Reads map from string and fill current instance with it.
+     * @param mapString raw map string;
+     */
+    void readFromEcsv(String mapString);
+    
+    /**
+     * Reads map from reader instance and fill current instance with it.
+     * @param mapReader reader of raw map content;
+     */
+    void readFromEcsv(Reader mapReader);
+    
+    /**
+     * Writes map entiies to string form.
+     * @return raw map form;
+     */
+    String writeToEcsv();
+    
+    /**
+     * Writes map entities to a writer with raw form.
+     * @param writer map writer;
+     */
+    void writeToEcsv(Writer writer);
 }
