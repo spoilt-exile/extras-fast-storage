@@ -18,6 +18,9 @@
  */
 package tk.freaxsoftware.extras.faststorage.mapped;
 
+import java.io.Writer;
+import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
+
 /**
  * Mapped entry contains raw entity form, parsed entity and key.
  * @author Stanislav Nepochatov
@@ -25,4 +28,60 @@ package tk.freaxsoftware.extras.faststorage.mapped;
  */
 public interface MappedEntry {
     
+    /**
+     * Gets key of entry.
+     * @return string of key;
+     */
+    String getKey();
+    
+    /**
+     * Get raw string type of entity.
+     * @return raw type;
+     */
+    String getType();
+    
+    /**
+     * Get entity class instance.
+     * @param <V> type generic;
+     * @return class of entity in entry or null if parsing faild;
+     */
+    <V extends ECSVAble> Class<V> getEntityType();
+    
+    /**
+     * Get raw unparsed entity string.
+     * @return raw string;
+     */
+    String getRawEntity();
+    
+    /**
+     * Get entity.
+     * @return entity or null if parsing failed;
+     */
+    ECSVAble getEntity();
+    
+    /**
+     * Finds out if parsing process complete normally or failed.
+     * @return true if parsing succeseded and entity could be retrieved or false if no entity inside entry;
+     */
+    Boolean isParsed();
+    
+    /**
+     * Get casted entity.
+     * @param <V> type generic;
+     * @param valueClass desired class to cast;
+     * @return casted entity or null if parsing failed or cast failed;
+     */
+    <V extends ECSVAble> V getEntity(Class<V> valueClass);
+    
+    /**
+     * Reads entity from raw string and save it in entry.
+     * @param entryString raw entity string;
+     */
+    void readFromEcsv(String entryString);
+    
+    /**
+     * Writes entity raw string into writer stream.
+     * @param entryWriter writer instance;
+     */
+    void writeToEcsv(Writer entryWriter);
 }
