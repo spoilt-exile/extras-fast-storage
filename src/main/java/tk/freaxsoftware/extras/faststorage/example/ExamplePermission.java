@@ -18,6 +18,7 @@
  */
 package tk.freaxsoftware.extras.faststorage.example;
 
+import java.util.Objects;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
@@ -142,4 +143,44 @@ public class ExamplePermission implements ECSVAble<Object> {
     public String getEntityType() {
         return TYPE;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.userName);
+        hash = 47 * hash + Objects.hashCode(this.canRead);
+        hash = 47 * hash + Objects.hashCode(this.canWrite);
+        hash = 47 * hash + Objects.hashCode(this.canDelete);
+        hash = 47 * hash + Objects.hashCode(this.mode);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExamplePermission other = (ExamplePermission) obj;
+        if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
+        if (!Objects.equals(this.canRead, other.canRead)) {
+            return false;
+        }
+        if (!Objects.equals(this.canWrite, other.canWrite)) {
+            return false;
+        }
+        if (!Objects.equals(this.canDelete, other.canDelete)) {
+            return false;
+        }
+        if (!Objects.equals(this.mode, other.mode)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

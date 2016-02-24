@@ -127,6 +127,7 @@ public class DefaultEntityMapEntry implements EntityMapEntry {
         key = firstParse[0];
         String[] restParse = ECSVParser.parseKeyValue(firstParse[1]);
         type = restParse[0];
+        rawEntity = restParse[1];
         EntityHandler handler = Handlers.getHandlerByType(type);
         if (handler != null) {
             entity = handler.readFromString(restParse[1]);

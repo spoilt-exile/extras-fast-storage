@@ -57,7 +57,7 @@ public class DefaultEntityMap implements EntityMap {
             Integer keyCount = entriesMap.containsKey(key) ? entriesMap.get(key) : 0;
             EntityMapEntry newEntry = new DefaultEntityMapEntry(key, value);
             entries.add(newEntry);
-            entriesMap.put(key, keyCount++);
+            entriesMap.put(key, ++keyCount);
         } else {
             entry.update(value);
         }
@@ -150,7 +150,9 @@ public class DefaultEntityMap implements EntityMap {
         while (entryIter.hasNext()) {
             EntityMapEntry entry = entryIter.next();
             if (entry.getKey().equals(key)) {
+                Integer keyCount = entriesMap.containsKey(key) ? entriesMap.get(key) : 0;
                 entryIter.remove();
+                entriesMap.put(key, --keyCount);
             }
         }
     }
@@ -161,7 +163,9 @@ public class DefaultEntityMap implements EntityMap {
         while (entryIter.hasNext()) {
             EntityMapEntry entry = entryIter.next();
             if (entry.getKey().equals(key) && entry.isParsed() && entry.getEntity().getKey().equals(key)) {
+                Integer keyCount = entriesMap.containsKey(key) ? entriesMap.get(key) : 0;
                 entryIter.remove();
+                entriesMap.put(key, --keyCount);
             }
         }
     }
@@ -183,20 +187,24 @@ public class DefaultEntityMap implements EntityMap {
         try {
             BufferedReader reader = new BufferedReader(mapReader);
             while (reader.ready()) {
-                EntityMapEntry entry = new DefaultEntityMapEntry(reader.readLine());
+                String rawLine = reader.readLine();
+                if (rawLine == null) {
+                    break;
+                }
+                EntityMapEntry entry = new DefaultEntityMapEntry(rawLine);
                 if (entry.isParsed()) {
                     EntityMapEntry oldEntry = getEntryByKeys(entry.getKey(), entry.getEntity().getKey());
                     if (oldEntry == null) {
                         Integer keyCount = entriesMap.containsKey(entry.getKey()) ? entriesMap.get(entry.getKey()) : 0;
                         entries.add(entry);
-                        entriesMap.put(entry.getKey(), keyCount++);
+                        entriesMap.put(entry.getKey(), ++keyCount);
                     } else {
                         entry.update(entry.getEntity());
                     }
                 } else {
                     Integer keyCount = entriesMap.containsKey(entry.getKey()) ? entriesMap.get(entry.getKey()) : 0;
                     entries.add(entry);
-                    entriesMap.put(entry.getKey(), keyCount++);
+                    entriesMap.put(entry.getKey(), ++keyCount);
                 }
             }
         } catch (IOException ioex) {

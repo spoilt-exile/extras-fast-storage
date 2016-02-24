@@ -20,6 +20,7 @@
 package tk.freaxsoftware.extras.faststorage.example;
 
 import java.util.List;
+import java.util.Objects;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFields;
@@ -164,5 +165,39 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     @Override
     public String getEntityType() {
         return TYPE;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExampleDirectory other = (ExampleDirectory) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.parentName, other.parentName)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.permissions, other.permissions)) {
+            return false;
+        }
+        return true;
     }
 }
