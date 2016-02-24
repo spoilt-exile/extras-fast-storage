@@ -20,6 +20,7 @@ package tk.freaxsoftware.extras.faststorage.mapped;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
@@ -104,15 +105,13 @@ public class DefaultEntityMapEntry implements EntityMapEntry {
 
     @Override
     public Boolean isParsed() {
-        return entity == null;
+        return entity != null;
     }
 
     @Override
     public <V extends ECSVAble> V getEntity(Class<V> valueClass) {
-        try {
+        if (entity.getClass().isAssignableFrom(valueClass)) {
             return (V) entity;
-        } catch (ClassCastException cex) {
-            //Nothing to do
         }
         return null;
     }
@@ -152,5 +151,38 @@ public class DefaultEntityMapEntry implements EntityMapEntry {
             throw new EntityStoreException("unable to save mapped entry", ioex);
         }
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.key);
+        hash = 79 * hash + Objects.hashCode(this.type);
+        hash = 79 * hash + Objects.hashCode(this.rawEntity);
+        hash = 79 * hash + Objects.hashCode(this.entity);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DefaultEntityMapEntry other = (DefaultEntityMapEntry) obj;
+        if (!Objects.equals(this.key, other.key)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.rawEntity, other.rawEntity)) {
+            return false;
+        }
+        if (!Objects.equals(this.entity, other.entity)) {
+            return false;
+        }
+        return true;
+    }
 }

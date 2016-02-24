@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
@@ -230,5 +231,27 @@ public class DefaultEntityMap implements EntityMap {
             }
         }
         return null;
-    } 
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.entriesMap);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DefaultEntityMap other = (DefaultEntityMap) obj;
+        if (!Objects.equals(this.entries, other.entries)) {
+            return false;
+        }
+        return true;
+    }
 }
