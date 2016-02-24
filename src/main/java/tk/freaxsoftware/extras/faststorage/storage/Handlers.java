@@ -62,7 +62,7 @@ public class Handlers {
      * @param type supplied entity type.
      * @return handler instance or null;
      */
-    public static EntityHandler getHandlerByClass(String type) {
+    public static EntityHandler getHandlerByType(String type) {
         for (Record record: records) {
             if (record.getType().equals(type)) {
                 return record.getInstance();

@@ -254,7 +254,7 @@ public class ECSVParser {
      * @throws ECSVParseException if there is no separator;
      * @return array with command and its arguments;
      */
-    private String[] parseKeyValue(String rawString) throws ECSVParseException {
+    public static String[] parseKeyValue(String rawString) throws ECSVParseException {
         String[] returnedArray = new String[2];
         Integer splitIndex = -1;
         for (Integer cursorIndex = 0; cursorIndex < rawString.length(); cursorIndex++) {

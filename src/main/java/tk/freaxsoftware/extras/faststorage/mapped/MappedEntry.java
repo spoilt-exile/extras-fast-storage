@@ -42,10 +42,9 @@ public interface MappedEntry {
     
     /**
      * Get entity class instance.
-     * @param <V> type generic;
      * @return class of entity in entry or null if parsing faild;
      */
-    <V extends ECSVAble> Class<V> getEntityType();
+    Class getEntityType();
     
     /**
      * Get raw unparsed entity string.
