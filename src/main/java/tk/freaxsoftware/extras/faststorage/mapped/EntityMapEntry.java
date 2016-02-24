@@ -26,7 +26,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * @author Stanislav Nepochatov
  * @since 3.0
  */
-public interface MappedEntry {
+public interface EntityMapEntry {
     
     /**
      * Gets key of entry.
@@ -71,6 +71,12 @@ public interface MappedEntry {
      * @return casted entity or null if parsing failed or cast failed;
      */
     <V extends ECSVAble> V getEntity(Class<V> valueClass);
+    
+    /**
+     * Updates entity inside entry. Used if there is entity with same key in map.
+     * @param updatedEntity updated entity to store;
+     */
+    void update(ECSVAble updatedEntity);
     
     /**
      * Reads entity from raw string and save it in entry.

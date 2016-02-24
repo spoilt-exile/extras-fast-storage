@@ -31,7 +31,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * @author Nepochatov Stanislav
  * @since 3.0
  */
-public interface MappedEntity {
+public interface EntityMap {
     
     /**
      * Adds entity to map. Map can't add entity if there is another 
@@ -98,7 +98,7 @@ public interface MappedEntity {
      * Get iterator for enties;
      * @return list iterator;
      */
-    ListIterator<MappedEntry> listiterator();
+    ListIterator<EntityMapEntry> listiterator();
     
     /**
      * Get set of keys;
@@ -117,7 +117,7 @@ public interface MappedEntity {
      * @param key key of map entry;
      * @param entityKey key of entity to delete;
      */
-    void remove(String key, String entityKey);
+    void remove(String key, Object entityKey);
     
     /**
      * Remove all entries.

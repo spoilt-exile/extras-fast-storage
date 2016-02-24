@@ -31,7 +31,7 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
  * Mapped entry default implementation.
  * @author Stanislav Nepochatov
  */
-public class MappedEntryImpl implements MappedEntry {
+public class DefaultEntityMapEntry implements EntityMapEntry {
     
     /**
      * Key of entry.
@@ -56,14 +56,25 @@ public class MappedEntryImpl implements MappedEntry {
     /**
      * Empty constructor.
      */
-    public MappedEntryImpl() {}
+    public DefaultEntityMapEntry() {}
     
     /**
      * Default constructor.
      * @param csv ECSV string of entry;
      */
-    public MappedEntryImpl(String csv) {
-        readFromEcsv(type);
+    public DefaultEntityMapEntry(String csv) {
+        readFromEcsv(csv);
+    }
+
+    /**
+     * Entity based constructor.
+     * @param key entry key;
+     * @param entity entity to save;
+     */
+    public DefaultEntityMapEntry(String key, ECSVAble entity) {
+        this.key = key;
+        this.type = entity.getEntityType();
+        this.entity = entity;
     }
 
     @Override
@@ -105,6 +116,11 @@ public class MappedEntryImpl implements MappedEntry {
         }
         return null;
     }
+    
+    @Override
+    public void update(ECSVAble updatedEntity) {
+        this.entity.update(updatedEntity);
+    }
 
     @Override
     public void readFromEcsv(String entryString) {
@@ -125,8 +141,12 @@ public class MappedEntryImpl implements MappedEntry {
             entryWriter.write(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
             entryWriter.write(type);
             entryWriter.write(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
-            EntityHandler handler = Handlers.getHandlerByType(type);
-            entryWriter.write(handler.writeToString(entity));
+            if (isParsed()) {
+                EntityHandler handler = Handlers.getHandlerByType(type);
+                entryWriter.write(handler.writeToString(entity));
+            } else {
+                entryWriter.write(rawEntity);
+            }
             entryWriter.write(ECSVFormat.LINE_BREAK_CHAR);
         } catch (IOException ioex) {
             throw new EntityStoreException("unable to save mapped entry", ioex);
