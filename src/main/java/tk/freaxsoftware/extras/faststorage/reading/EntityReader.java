@@ -33,12 +33,6 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 public interface EntityReader<K> {
     
     /**
-     * Reads entity type attribute.
-     * @return string type value;
-     */
-    String readType();
-    
-    /**
      * Reads entity key value.
      * @return entity key;
      */

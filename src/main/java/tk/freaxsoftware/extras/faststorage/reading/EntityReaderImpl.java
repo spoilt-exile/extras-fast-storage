@@ -128,14 +128,6 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     }
 
     @Override
-    public String readType() {
-        checkFieldAndState(ECSVFields.TYPE);
-        String type = currentParsed;
-        moveForward();
-        return type;
-    }
-
-    @Override
     public K readKey() {
         checkFieldAndState(ECSVFields.KEY);
         String keyStr = currentParsed;

@@ -33,12 +33,6 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 public interface EntityWriter<K> {
     
     /**
-     * Writes entity type attribute to ECSV stream.
-     * @param type entity type;
-     */
-    void writeType(String type);
-    
-    /**
      * Writes entity key value to ECSV stream.
      * @param key entity unique key;
      */

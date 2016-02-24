@@ -134,40 +134,31 @@ public class ECSVParser {
      * @throws tk.freaxsoftware.extras.faststorage.reading.ParseException
      */
     public synchronized List<String> parseEntity(String entityLine) throws ECSVParseException {
-        String rawEntity;
         List<String> parsed = new ArrayList(defintion.getFields().size());
-        if (currentField.getField() == ECSVFields.TYPE) {
-            String[] parsedType = parseKeyValue(entityLine);
-            parsed.add(parsedType[0]);
-            rawEntity = parsedType[1];
-            moveForward();
-        } else {
-            rawEntity = entityLine;
-        }
         Integer beginSlice = 0;
         Boolean ignoreComma = false;
-        for (Integer index = 0; index < rawEntity.length(); index++) {
-            char currChar = rawEntity.charAt(index);
+        for (Integer index = 0; index < entityLine.length(); index++) {
+            char currChar = entityLine.charAt(index);
             char nextChar = '1';
             char prevChar = '1';
             if (index > 0) {
-                prevChar = rawEntity.charAt(index - 1);
+                prevChar = entityLine.charAt(index - 1);
             }
-            if (index < rawEntity.length() - 1) {
-                nextChar = rawEntity.charAt(index + 1);
+            if (index < entityLine.length() - 1) {
+                nextChar = entityLine.charAt(index + 1);
             }
             switch (parseMarker(prevChar, currChar, nextChar)) {
                 case 0:
                     continue;
                 case 1:
                     if (ignoreComma == false) {
-                        String word = rawEntity.substring(beginSlice, index);
+                        String word = entityLine.substring(beginSlice, index);
                         if (validate(currentField.getField(), word)) {
                             parsed.add(word);
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ECSVParseException("Word validation faield, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("Word validation faield, format error!", entityLine, index, currentField.getField());
                         }
                     }
                     break;
@@ -178,13 +169,13 @@ public class ECSVParser {
                 case 3:
                     if (ignoreComma == true) {
                         ignoreComma = false;
-                        String string = rawEntity.substring(beginSlice, index);
+                        String string = entityLine.substring(beginSlice, index);
                         if (validate(currentField.getField(), string)) {
                             parsed.add(string);
                             moveForward();
                             beginSlice = index + 1;
                         } else {
-                            throw new ECSVParseException("String validation failed, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("String validation failed, format error!", entityLine, index, currentField.getField());
                         }
                     }
                     break;
@@ -195,11 +186,11 @@ public class ECSVParser {
                 case 5:
                     if (ignoreComma == true) {
                         ignoreComma = false;
-                        String array = rawEntity.substring(beginSlice, index);
+                        String array = entityLine.substring(beginSlice, index);
                         if (validate(currentField.getField(), array)) {
                             parsed.add(array);
                         } else {
-                            throw new ECSVParseException("Array validation failed, format error!", rawEntity, index, currentField.getField());
+                            throw new ECSVParseException("Array validation failed, format error!", entityLine, index, currentField.getField());
                         }
                         moveForward();
                         beginSlice = index + 1;
@@ -214,12 +205,12 @@ public class ECSVParser {
                     }
                     break;
             }
-            if ((!hasMoreSeparators(rawEntity.substring(index + 1))) && (index < rawEntity.length() - 1)) {
-                String word = rawEntity.substring(index + 1);
+            if ((!hasMoreSeparators(entityLine.substring(index + 1))) && (index < entityLine.length() - 1)) {
+                String word = entityLine.substring(index + 1);
                 if (validate(currentField.getField(), word)) {
                     parsed.add(word);
                 } else {
-                    throw new ECSVParseException("Word validation failed, format error!", rawEntity, index, currentField.getField());
+                    throw new ECSVParseException("Word validation failed, format error!", entityLine, index, currentField.getField());
                 }
                 moveForward();
                 break;

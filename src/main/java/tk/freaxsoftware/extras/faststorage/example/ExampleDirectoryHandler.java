@@ -26,6 +26,10 @@ import tk.freaxsoftware.extras.faststorage.storage.AbstractEntityHandler;
  * @author Stanislav Nepochatov
  */
 public class ExampleDirectoryHandler extends AbstractEntityHandler<ExampleDirectory, Integer> {
+    
+    public ExampleDirectoryHandler() {
+        this(null);
+    }
 
     public ExampleDirectoryHandler(String filePath) {
         super(ExampleDirectory.class, ExampleDirectory.DEFINITION, filePath);

@@ -36,7 +36,6 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     public static final String TYPE = "DIR";
     
     public static final ECSVDefinition DEFINITION = ECSVDefinition.createNew()
-                .addPrimitive(ECSVFields.TYPE)
                 .addKey(Integer.class)
                 .addPrimitive(ECSVFields.PR_WORD)
                 .addPrimitive(ECSVFields.PR_WORD)
@@ -115,18 +114,11 @@ public class ExampleDirectory implements ECSVAble<Integer> {
 
     @Override
     public ECSVDefinition getDefinition() {
-        return ECSVDefinition.createNew()
-                .addPrimitive(ECSVFields.TYPE)
-                .addKey(Integer.class)
-                .addPrimitive(ECSVFields.PR_WORD)
-                .addPrimitive(ECSVFields.PR_WORD)
-                .addPrimitive(ECSVFields.PR_STRING)
-                .addInternalArray(ExamplePermission.class, String.valueOf(ECSVFormat.INTERNAL_DEFAULT_SEPARATOR), ECSVFormat.INTERNAL_DEFAULT_SEPARATOR_EXPR);
+        return DEFINITION;
     }
 
     @Override
     public void readFromECSV(EntityReader<Integer> reader) {
-        reader.readType();
         this.id = reader.readKey();
         this.name = reader.readWord();
         this.parentName = reader.readWord();
@@ -136,7 +128,6 @@ public class ExampleDirectory implements ECSVAble<Integer> {
 
     @Override
     public void writeToECSV(EntityWriter<Integer> writer) {
-        writer.writeType(TYPE);
         writer.writeKey(id);
         writer.writeWord(name);
         writer.writeWord(parentName);

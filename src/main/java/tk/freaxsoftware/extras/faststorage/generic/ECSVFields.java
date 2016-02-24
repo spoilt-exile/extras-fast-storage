@@ -25,11 +25,6 @@ package tk.freaxsoftware.extras.faststorage.generic;
 public enum ECSVFields {
     
     /**
-     * Entity type print.
-     */
-    TYPE,
-    
-    /**
      * Entity key.
      */
     KEY,

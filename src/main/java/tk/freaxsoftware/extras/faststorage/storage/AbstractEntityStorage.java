@@ -75,9 +75,13 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
     public AbstractEntityStorage(Class<E> entityClass, ECSVDefinition entityDefinition, String filePath) {
         this.entityClass = entityClass;
         this.entityDefinition = entityDefinition;
-        this.path = filePath;
-        synchronized (entitiesLock) {
-            entitiesStore = readEntitiesFromStore();
+        if (filePath != null) {
+            this.path = filePath;
+            synchronized (entitiesLock) {
+                entitiesStore = readEntitiesFromStore();
+            }
+        } else {
+            this.path = null;
         }
     }
     

@@ -89,21 +89,11 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
      */
     public void moveForward() {
         if (fieldIterator.hasNext()) {
-            if(currentField.getField() != ECSVFields.TYPE) {
-                buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
-            }
+            buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
             currentField = fieldIterator.next();
         } else {
             currentField = null;
         }
-    }
-
-    @Override
-    public void writeType(String type) {
-        checkField(ECSVFields.TYPE);
-        buffer.append(type);
-        buffer.append(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
-        moveForward();
     }
 
     @Override
