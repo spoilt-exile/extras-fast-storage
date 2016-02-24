@@ -30,6 +30,13 @@ import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 public interface ECSVAble<K> {
     
     /**
+     * Get string representation of entity type. Entity type 
+     * may be used during serialization.
+     * @return string with type of entity;
+     */
+    String getEntityType();
+    
+    /**
      * Gets entity key.
      * @return entity unique key;
      */

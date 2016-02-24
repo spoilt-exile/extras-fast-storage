@@ -30,6 +30,8 @@ import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
  */
 public class HandlerEntry implements ECSVAble<String> {
     
+    public static final String TYPE = "HANDLER";
+    
     public static final ECSVDefinition DEFINITION = ECSVDefinition.createNew()
                 .addKey(String.class)
                 .addPrimitive(PR_STRING)
@@ -120,6 +122,11 @@ public class HandlerEntry implements ECSVAble<String> {
     @Override
     public void update(ECSVAble<String> updatedEntity) {
         throw new UnsupportedOperationException("Update not supported for this entity.");
+    }
+
+    @Override
+    public String getEntityType() {
+        return TYPE;
     }
     
 }

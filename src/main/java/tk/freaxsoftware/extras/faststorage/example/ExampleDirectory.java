@@ -169,4 +169,9 @@ public class ExampleDirectory implements ECSVAble<Integer> {
     public String toString() {
         return "ExampleDirectory{" + "id=" + id + ", name=" + name + ", parentName=" + parentName + ", description=" + description + '}';
     }
+
+    @Override
+    public String getEntityType() {
+        return TYPE;
+    }
 }

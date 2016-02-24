@@ -30,6 +30,15 @@ import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
  */
 public class ExamplePermission implements ECSVAble<Object> {
     
+    public final static String TYPE = "PERMISSION";
+    
+    public final static ECSVDefinition DEFINITION = ECSVDefinition.createNew()
+                .addPrimitive(ECSVFields.PR_WORD)
+                .addPrimitive(ECSVFields.PR_BOOLEAN)
+                .addPrimitive(ECSVFields.PR_BOOLEAN)
+                .addPrimitive(ECSVFields.PR_BOOLEAN)
+                .addPrimitive(ECSVFields.PR_INT);
+    
     private String userName;
     
     private Boolean canRead;
@@ -103,12 +112,7 @@ public class ExamplePermission implements ECSVAble<Object> {
 
     @Override
     public ECSVDefinition getDefinition() {
-        return ECSVDefinition.createNew()
-                .addPrimitive(ECSVFields.PR_WORD)
-                .addPrimitive(ECSVFields.PR_BOOLEAN)
-                .addPrimitive(ECSVFields.PR_BOOLEAN)
-                .addPrimitive(ECSVFields.PR_BOOLEAN)
-                .addPrimitive(ECSVFields.PR_INT);
+        return DEFINITION;
     }
 
     @Override
@@ -133,4 +137,9 @@ public class ExamplePermission implements ECSVAble<Object> {
     public void update(ECSVAble<Object> updatedEntity) {
         //Example permission doesn't have storage, then update method may be empty.
     }    
+
+    @Override
+    public String getEntityType() {
+        return TYPE;
+    }
 }
