@@ -26,6 +26,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
@@ -46,6 +48,8 @@ import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
  * @param <K> entities key type generic;
  */
 public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements EntityStorage<E, K> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntityStorage.class);
     
     /**
      * Path to resource.
@@ -90,17 +94,20 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
      * @return list of entities;
      */
     protected List<E> readEntitiesFromStore() {
+        LOGGER.info("reading entity storage with file:" + path);
         List<E> readedEntities = null;
         File storageFile = new File(path);
         Boolean fileExsists = false;
         try {
             if (!storageFile.exists()) {
+                LOGGER.warn("trying to create new file");
                 storageFile.createNewFile();
                 fileExsists = true;
             } else {
                 fileExsists = true;
             }
         } catch (IOException ioex) {
+            LOGGER.error("Can't create new entity file: " + path, ioex);
             throw new EntityStoreException("Can't create new entity file: " + path, ioex);
         }
         BufferedReader reader = null;
@@ -110,14 +117,18 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
                 EntityStreamReader<E> entityReader = new EntityStreamReaderImpl<>(entityClass, entityDefinition);
                 readedEntities = entityReader.readEntities(reader);
             } catch (FileNotFoundException fex) {
+                LOGGER.error("File not found: " + path, fex);
                 throw new EntityStoreException("File not found: " + path, fex);
             } catch (EntityProcessingException pex) {
+                LOGGER.error("Error during processing of entities", pex);
                 throw new EntityStoreException("Error during processing of entities", pex);
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
-                    } catch (IOException ioex) {}
+                    } catch (IOException ioex) {
+                        LOGGER.error("unable to close entity reader", ioex);
+                    }
                 }
             }
         }
@@ -140,12 +151,15 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
             writer.flush();
             writer.close();
         } catch (IOException ioex) {
+            LOGGER.error("Storage IOException at appending: " + path, ioex);
             throw new EntityStoreException("Storage IOException at appending: " + path, ioex);
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
-                } catch (IOException ioex) {}
+                } catch (IOException ioex) {
+                    LOGGER.error("unable to close entity reader", ioex);
+                }
             }
         }
     }
@@ -162,14 +176,18 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
             writer.flush();
             writer.close();
         } catch (IOException ioex) {
+            LOGGER.error("Storage IOException at saving: " + path, ioex);
             throw new EntityStoreException("Storage IOException at saving: " + path, ioex);
         } catch (EntityProcessingException pex) {
+            LOGGER.debug("Error during processing of entities", pex);
             throw new EntityStoreException("Error during processing of entities", pex);
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
-                } catch (IOException ioex) {}
+                } catch (IOException ioex) {
+                    LOGGER.error("unable to close entity reader", ioex);
+                }
             }
         }
     }

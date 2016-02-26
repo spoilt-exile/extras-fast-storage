@@ -20,6 +20,8 @@ package tk.freaxsoftware.extras.faststorage.generic;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
 import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
 
@@ -30,6 +32,8 @@ import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
  * @param <K> referenced entity key generic type;
  */
 public class EntityReference<R extends ECSVAble<K>, K> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityReference.class);
     
     /**
      * Referenced entity key.
@@ -75,7 +79,7 @@ public class EntityReference<R extends ECSVAble<K>, K> {
             R entity = ThreadPoolUtil.getExecutor().submit(callable).get();
             return entity;
         } catch (InterruptedException | ExecutionException ex) {
-            //Do nothing;
+            LOGGER.error("can't get entity thorough reference", ex);
         }
         return null;
     }

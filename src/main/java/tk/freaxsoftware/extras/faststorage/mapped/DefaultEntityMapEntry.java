@@ -21,6 +21,8 @@ package tk.freaxsoftware.extras.faststorage.mapped;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
@@ -33,6 +35,8 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
  * @author Stanislav Nepochatov
  */
 public class DefaultEntityMapEntry implements EntityMapEntry {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultEntityMapEntry.class);
     
     /**
      * Key of entry.
@@ -149,6 +153,7 @@ public class DefaultEntityMapEntry implements EntityMapEntry {
             }
             entryWriter.write(ECSVFormat.LINE_BREAK_CHAR);
         } catch (IOException ioex) {
+            LOGGER.error("unable to save mapped entry", ioex);
             throw new EntityStoreException("unable to save mapped entry", ioex);
         }
     }

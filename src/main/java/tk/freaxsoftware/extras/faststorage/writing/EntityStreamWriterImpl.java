@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStateException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
@@ -35,6 +37,8 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVFormat;
  * @param <E> all ECSVAble successors;
  */
 public class EntityStreamWriterImpl<E extends ECSVAble, K> implements EntityStreamWriter<E> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityStreamWriterImpl.class);
     
     /**
      * Entity class definition.
@@ -67,8 +71,10 @@ public class EntityStreamWriterImpl<E extends ECSVAble, K> implements EntityStre
             }
             entityWriter.write(buffer.toString());
         } catch (IOException ioex) {
+            LOGGER.error("Unable to write result of writing into writer", ioex);
             throw new EntityProcessingException("Unable to write result of writing into writer", ioex);
         } catch (EntityStateException esex) {
+            LOGGER.error("Unable to write entity", esex);
             throw new EntityProcessingException("Unable to write entity", esex);
         }
     }

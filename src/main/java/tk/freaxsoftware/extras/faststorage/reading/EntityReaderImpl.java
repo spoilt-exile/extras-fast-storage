@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStateException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
@@ -47,6 +49,8 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
  * @param <K>
  */
 public class EntityReaderImpl<K> implements EntityReader<K> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityReaderImpl.class);
     
     /**
      * ECSV entity fields defintion.
@@ -145,7 +149,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
                 K keyInstance = keyConstructor.newInstance(keyStr);
                 return keyInstance;
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                //Do nothing;
+                LOGGER.error("unable to get enity key instance" + ex);
             }
             return null;
         }
@@ -201,6 +205,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         try {
             return dateFormat.parse(dateValue);
         } catch (ParseException pex) {
+            LOGGER.error("unable to parse date value: " + dateValue + " with format: " + dateFormat, pex);
             return null;
         }
     }
@@ -224,7 +229,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
                 Constructor<K> keyConstructor = referenceField.getReferenceKeyClass().getConstructor(String.class);
                 key = keyConstructor.newInstance(referenceValue);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                //Do nothing;
+                LOGGER.error("unable to get enity key instance" + ex);
             }
         }
         if (key != null) {
@@ -256,7 +261,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
                     Constructor<K> keyConstructor = referenceField.getReferenceKeyClass().getConstructor(String.class);
                     key = keyConstructor.newInstance(keyStr);
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                    //Do nothing;
+                    LOGGER.error("unable to get enity key instance" + ex);
                 }
             }
             if (key != null) {

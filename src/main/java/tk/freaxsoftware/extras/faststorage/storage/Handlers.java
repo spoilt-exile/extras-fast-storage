@@ -20,6 +20,8 @@ package tk.freaxsoftware.extras.faststorage.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 
 /**
@@ -27,6 +29,8 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * @author Stanislav Nepochatov
  */
 public class Handlers {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(Handlers.class);
     
     /**
      * Record list of handlers in runtime.
@@ -40,6 +44,7 @@ public class Handlers {
      * @param handler instance of handler;
      */
     public static void registerHandler(String type, Class<? extends ECSVAble> entityClass, EntityHandler handler) {
+        LOGGER.info("registering handler for entity: " + entityClass.getCanonicalName() + " handler: " + handler.getClass().getCanonicalName());
         records.add(new Record(type, entityClass, handler));
     }
     

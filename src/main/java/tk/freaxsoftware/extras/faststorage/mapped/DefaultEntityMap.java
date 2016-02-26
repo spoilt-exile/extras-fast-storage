@@ -32,6 +32,8 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 
@@ -40,6 +42,8 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * @author Stanislav Nepochatov
  */
 public class DefaultEntityMap implements EntityMap {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultEntityMap.class);
     
     private List<EntityMapEntry> entries;
     
@@ -208,6 +212,7 @@ public class DefaultEntityMap implements EntityMap {
                 }
             }
         } catch (IOException ioex) {
+            LOGGER.error("unable to read map from reader", ioex);
             throw new EntityStoreException("unable to read map from reader", ioex);
         }
     }

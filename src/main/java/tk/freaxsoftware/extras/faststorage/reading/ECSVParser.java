@@ -131,7 +131,6 @@ public class ECSVParser {
      * Parse entity line and return list of parsed pieces of entity for further reading.
      * @param entityLine line to parse;
      * @return arraylist string of parsed words;
-     * @throws tk.freaxsoftware.extras.faststorage.reading.ParseException
      */
     public synchronized List<String> parseEntity(String entityLine) throws ECSVParseException {
         List<String> parsed = new ArrayList(defintion.getFields().size());

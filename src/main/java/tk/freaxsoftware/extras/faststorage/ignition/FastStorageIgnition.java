@@ -21,10 +21,10 @@ package tk.freaxsoftware.extras.faststorage.ignition;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityProcessingException;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
@@ -39,19 +39,24 @@ import tk.freaxsoftware.extras.faststorage.storage.Handlers;
  */
 public class FastStorageIgnition {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(FastStorageIgnition.class);
+    
     /**
      * Reads handler's info from stream and init them with registration.
      * @param descriptorStream stream of resource with ECSV list of handler enties;
      * @throws EntityProcessingException 
      */
     public static void ignite(InputStream descriptorStream) throws EntityProcessingException {
+        LOGGER.info("starts ignition...");
         Reader reader = new InputStreamReader(descriptorStream);
         EntityStreamReader<HandlerEntry> entityReader = new EntityStreamReaderImpl<>(HandlerEntry.class, HandlerEntry.DEFINITION);
         List<HandlerEntry> handlerEntries = entityReader.readEntities(reader);
         for (HandlerEntry entry: handlerEntries) {
             try {
                 igniteEntry(entry);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+                LOGGER.error("unable to ignite entry: " + entry, ex);
+            }
         }
     }
     
@@ -62,17 +67,20 @@ public class FastStorageIgnition {
     private static void igniteEntry(HandlerEntry entry) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchFieldException {
         Class entityClass = Class.forName(entry.getEntityClassname());
         Class handlerClass = Class.forName(entry.getHandlerClassname());
+        LOGGER.info("process ignition on entry for " + entityClass.getCanonicalName() + " with handler: " + handlerClass.getCanonicalName());
         EntityHandler handlerInstance = null;
         ECSVDefinition definition = extractDefinition(entityClass);
         try {
             handlerInstance = (EntityHandler) handlerClass.getDeclaredConstructor(Class.class, ECSVDefinition.class, String.class)
                     .newInstance(entityClass, definition, entry.getStorageFilepath());
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
         if (handlerInstance == null) {
             try {
                 handlerInstance = (EntityHandler) handlerClass.getDeclaredConstructor(String.class)
                         .newInstance(entry.getStorageFilepath());
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
         if (handlerInstance == null) {
             handlerInstance = (EntityHandler) handlerClass.newInstance();
@@ -92,7 +100,9 @@ public class FastStorageIgnition {
         Field definitionField = null;
         try {
             definitionField = entityClass.getDeclaredField("DEFINITION");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+            LOGGER.error("unable to extract entity definition by static DEFINITION field", ex);
+        }
         if (definitionField == null) {
             ECSVAble entity = (ECSVAble) entityClass.newInstance();
             return entity.getDefinition();
