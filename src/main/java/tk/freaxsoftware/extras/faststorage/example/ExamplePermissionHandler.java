@@ -79,7 +79,7 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
     }
 
     @Override
-    public void update(ExamplePermission entity) {
+    public void save(ExamplePermission entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

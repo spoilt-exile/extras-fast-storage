@@ -207,7 +207,7 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
     }
 
     @Override
-    public void update(E entity) {
+    public void save(E entity) {
         E findedEntity = get(entity.getKey());
         if (findedEntity != null) {
             //Don't call update() if changes occurred in the same entity instance.
@@ -215,6 +215,8 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
                 findedEntity.update(entity);
             }
             saveEntitiesToStore();
+        } else {
+            create(entity);
         }
     }
 

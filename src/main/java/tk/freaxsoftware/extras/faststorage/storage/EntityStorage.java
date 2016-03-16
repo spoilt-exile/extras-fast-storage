@@ -42,10 +42,10 @@ public interface EntityStorage<E extends ECSVAble<K>, K> {
     void create(E entity);
     
     /**
-     * Updates entity in storage.
-     * @param entity updated entity;
+     * Saves entity in storage.
+     * @param entity save entity;
      */
-    void update(E entity);
+    void save(E entity);
     
     /**
      * Gets entity from storage by some unique key.

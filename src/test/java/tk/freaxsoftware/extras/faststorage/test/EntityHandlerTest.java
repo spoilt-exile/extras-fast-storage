@@ -65,7 +65,7 @@ public class EntityHandlerTest {
         directory1.setName("Public");
         directory1.setDescription("Public folder");
         directory1.setPermissions(Collections.EMPTY_LIST);
-        handler.update(directory1);
+        handler.save(directory1);
     }
     
     @Test
