@@ -71,7 +71,7 @@ public class EntityHandlerTest {
     @Test
     public void referenceTest() {
         EntityReference<ExampleDirectory, Integer> testReference = 
-                Handlers.getHandlerByClass(ExampleDirectory.class).getReference(1);
+                new EntityReference<>(1, ExampleDirectory.class);
         ExampleDirectory directory0 = testReference.getEntity();
         Assert.assertNotNull(directory0);
         Assert.assertEquals(Integer.valueOf(1), directory0.getId());

@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
+import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
 
 /**
@@ -42,18 +43,35 @@ public class EntityListReference<R extends ECSVAble<K>, K> {
     private final List<K> keys;
     
     /**
-     * Hanlder responsible for referenced entity.
+     * Entity class.
      */
-    private final EntityHandler<R, K> handler;
+    private final Class<R> entityClass;
     
     /**
-     * Constructor.
-     * @param givenKeys list of keys;
-     * @param givenHandler handler for entity;
+     * Enable internal cache.
      */
-    public EntityListReference(List<K> givenKeys, EntityHandler<R, K> givenHandler) {
-        keys = givenKeys;
-        handler = givenHandler;
+    private final Boolean enableCache;
+    
+    /**
+     * Hanlder responsible for referenced entity.
+     */
+    private EntityHandler<R, K> handler;
+    
+    /**
+     * Referenced entities cache.
+     */
+    private List<R> entities;
+    
+    /**
+     * Default constructor. Should be used when status of handler during entity construction unknown.
+     * @param givenKeys list of keys;
+     * @param givenClass class of referenced entity;
+     * @param cacheEnabled enable internal reference handler caching;
+     */
+    public EntityListReference(List<K> givenKeys, Class<R> givenClass, Boolean cacheEnabled) {
+        this.keys = givenKeys;
+        this.entityClass = givenClass;
+        this.enableCache = cacheEnabled;
     }
     
     /**
@@ -65,23 +83,47 @@ public class EntityListReference<R extends ECSVAble<K>, K> {
     }
     
     /**
+     * Clean cached state of reference handler.
+     */
+    public void cleanCache() {
+        entities = null;
+    }
+    
+    /**
      * Gets list of enteties from reference. Method may block execution for a while.
      * @return list of enteties from reference;
      */
     public List<R> getEntities() {
+        if (enableCache && entities != null) {
+            return entities;
+        }
         Callable<List<R>> callable = new Callable<List<R>>() {
 
             @Override
             public List<R> call() throws Exception {
-                return handler.get(keys);
+                return getHandler().get(keys);
             }
         };
         try {
-            List<R> entities = ThreadPoolUtil.getExecutor().submit(callable).get();
-            return entities;
+            List<R> result = ThreadPoolUtil.getExecutor().submit(callable).get();
+            if (enableCache) {
+                entities = result;
+            }
+            return result;
         } catch (InterruptedException | ExecutionException ex) {
             LOGGER.error("can't get entities list thorough reference", ex);
         }
         return null;
+    }
+    
+    /**
+     * Gets handler in safe way.
+     * @return entity handler;
+     */
+    private EntityHandler<R, K> getHandler() {
+        if (handler == null) {
+            handler = Handlers.getHandlerByClass(entityClass);
+        }
+        return handler;
     }
 }

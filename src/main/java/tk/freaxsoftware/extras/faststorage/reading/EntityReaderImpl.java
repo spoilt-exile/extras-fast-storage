@@ -216,7 +216,6 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         ECSVFieldReference referenceField = (ECSVFieldReference) currentField;
         String referenceValue = currentParsed;
         moveForward();
-        EntityHandler<R, K> handler = Handlers.getHandlerByClass(entityRefClass);
         K key = null;
         if (referenceField.getReferenceKeyClass() == String.class) {
             key = (K) referenceValue;
@@ -233,7 +232,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
             }
         }
         if (key != null) {
-            return handler.getReference(key);
+            return new EntityReference<>(key, referenceField.getReferenceClass());
         } else {
             return null;
         }
@@ -245,7 +244,6 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         ECSVFieldReference referenceField = (ECSVFieldReference) currentField;
         String referenceValue = currentParsed;
         moveForward();
-        EntityHandler<R, K> handler = Handlers.getHandlerByClass(entityRefClass);
         List<K> keys = new ArrayList<>();
         String[] keysStr = referenceValue.split(ECSVFormat.GENERIC_SEPARATOR);
         for (String keyStr: keysStr) {
@@ -268,7 +266,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
                 keys.add(key);
             }
         }
-        return handler.getListReference(keys);
+        return new EntityListReference<>(keys, referenceField.getReferenceClass(), false);
     }
 
     @Override

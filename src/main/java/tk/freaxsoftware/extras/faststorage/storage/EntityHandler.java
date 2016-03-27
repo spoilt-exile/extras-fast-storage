@@ -18,10 +18,7 @@
  */
 package tk.freaxsoftware.extras.faststorage.storage;
 
-import java.util.List;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
-import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
-import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 
 /**
  * Methods definition for entity handler implementaion. Handler do referencing works 
@@ -43,26 +40,6 @@ public interface EntityHandler<E extends ECSVAble<K>, K> extends EntityStorage<E
      * @return type unique name;
      */
     String getType();
-    
-    /**
-     * Finds out if handler is ready for communication and loaded all items from storage.
-     * @return true if references could be executed / false if storage still loading.
-     */
-    Boolean isReady();
-    
-    /**
-     * Get reference for entity inside storage by it's key.
-     * @param key entity key;
-     * @return reference for entity lazy loading;
-     */
-    EntityReference<E, K> getReference(K key);
-    
-    /**
-     * Get list reference for entity inside storage by list of keys;
-     * @param keys list of keys;
-     * @return list reference for lazy loading;
-     */
-    EntityListReference<E, K> getListReference(List<K> keys);
     
     /**
      * Reads entity from raw string.

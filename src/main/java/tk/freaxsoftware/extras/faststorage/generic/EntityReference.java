@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
+import tk.freaxsoftware.extras.faststorage.storage.Handlers;
 import tk.freaxsoftware.extras.faststorage.utils.ThreadPoolUtil;
 
 /**
@@ -41,18 +42,23 @@ public class EntityReference<R extends ECSVAble<K>, K> {
     private final K key;
     
     /**
+     * Referenced entity class.
+     */
+    private final Class<R> entityClass;
+    
+    /**
      * Hanlder responsible for referenced entity.
      */
-    private final EntityHandler<R, K> handler;
+    private EntityHandler<R, K> handler;
     
     /**
      * Constructor.
      * @param givenKey key of entity;
      * @param givenHandler handler for entity;
      */
-    public EntityReference(K givenKey, EntityHandler<R, K> givenHandler) {
+    public EntityReference(K givenKey, Class<R> givenClass) {
         key = givenKey;
-        handler = givenHandler;
+        entityClass = givenClass;
     }
     
     /**
@@ -72,7 +78,7 @@ public class EntityReference<R extends ECSVAble<K>, K> {
 
             @Override
             public R call() throws Exception {
-                return handler.get(key);
+                return getHandler().get(key);
             }
         };
         try {
@@ -82,5 +88,16 @@ public class EntityReference<R extends ECSVAble<K>, K> {
             LOGGER.error("can't get entity thorough reference", ex);
         }
         return null;
+    }
+    
+    /**
+     * Gets handler in safe way.
+     * @return entity handler;
+     */
+    private EntityHandler<R, K> getHandler() {
+        if (handler == null) {
+            handler = Handlers.getHandlerByClass(entityClass);
+        }
+        return handler;
     }
 }

@@ -54,5 +54,10 @@ public class ExampleDirectoryHandler extends AbstractEntityHandler<ExampleDirect
     public String getType() {
         return ExampleDirectory.TYPE;
     }
+
+    @Override
+    public void onStorageCreation() {
+        //Do nothing
+    }
     
 }

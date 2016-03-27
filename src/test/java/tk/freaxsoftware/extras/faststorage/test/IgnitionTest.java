@@ -54,7 +54,7 @@ public class IgnitionTest {
     public void igniteDirTest() {
         EntityHandler<ExampleDirectory, Integer> directoryHandler = Handlers.getHandlerByClass(ExampleDirectory.class);
         assertNotNull(directoryHandler);
-        EntityReference<ExampleDirectory, Integer> directoryRef2 = directoryHandler.getReference(2);
+        EntityReference<ExampleDirectory, Integer> directoryRef2 = new EntityReference<>(2, ExampleDirectory.class);
         ExampleDirectory directory2 = directoryRef2.getEntity();
         assertNotNull(directory2);
     }

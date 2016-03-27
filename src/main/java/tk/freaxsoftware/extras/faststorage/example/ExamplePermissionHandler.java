@@ -43,21 +43,6 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
     }
 
     @Override
-    public Boolean isReady() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public EntityReference<ExamplePermission, Object> getReference(Object key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public EntityListReference<ExamplePermission, Object> getListReference(List<Object> keys) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public ExamplePermission readFromString(String rawString) {
         EntityReader<Object> reader = new EntityReaderImpl<>(reference.getDefinition(), rawString);
         ExamplePermission newEntity = new ExamplePermission();
@@ -115,6 +100,11 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
 
     @Override
     public Object getNewKey() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onStorageCreation() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

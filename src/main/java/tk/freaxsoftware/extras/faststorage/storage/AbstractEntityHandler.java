@@ -55,20 +55,4 @@ public abstract class AbstractEntityHandler<E extends ECSVAble<K>, K> extends Ab
         entity.readFromECSV(reader);
         return entity;
     }
-
-    @Override
-    public EntityListReference<E, K> getListReference(List<K> keys) {
-        return new EntityListReference<>(keys, this);
-    }
-
-    @Override
-    public EntityReference<E, K> getReference(K key) {
-        return new EntityReference<>(key, this);
-    }
-
-    @Override
-    public Boolean isReady() {
-        return true; //TODO: implement ready check
-    }
-    
 }

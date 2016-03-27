@@ -80,4 +80,8 @@ public interface EntityStorage<E extends ECSVAble<K>, K> {
      */
     void delete(E entity);
     
+    /**
+     * Callback method called to fill empty storage by data.
+     */
+    void onStorageCreation();
 }
