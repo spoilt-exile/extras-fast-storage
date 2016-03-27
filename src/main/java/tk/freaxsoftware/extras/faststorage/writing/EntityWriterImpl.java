@@ -203,7 +203,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
             Map.Entry entry = mapIterator.next();
             buffer.append(keyConverter != null ? keyConverter.convertTo(entry.getKey()) : entry.getKey().toString());
             buffer.append(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
-            buffer.append(keyConverter != null ? keyConverter.convertTo(entry.getValue()) : entry.getValue().toString());
+            buffer.append(valueConverter != null ? valueConverter.convertTo(entry.getValue()) : entry.getValue().toString());
             if (mapIterator.hasNext()) {
                 buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
             }
