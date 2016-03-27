@@ -135,6 +135,9 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     public K readKey() {
         checkFieldAndState(ECSVFields.KEY);
         String keyStr = currentParsed;
+        if (keyStr.equals(ECSVFormat.NULL_VALUE)) {
+            throw new EntityStateException("Key of value can't be null!");
+        }
         ECSVFieldKey keyField = (ECSVFieldKey) currentField;
         moveForward();
         if (keyField.getKeyClass() == String.class) {
@@ -158,7 +161,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     @Override
     public String readWord() {
         checkFieldAndState(ECSVFields.PR_WORD);
-        String word = currentParsed;
+        String word = currentParsed.equals(ECSVFormat.NULL_VALUE) ? null : currentParsed;
         moveForward();
         return word;
     }
@@ -166,7 +169,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     @Override
     public String readString() {
         checkFieldAndState(ECSVFields.PR_STRING);
-        String string = currentParsed;
+        String string = currentParsed.equals(ECSVFormat.NULL_VALUE) ? null : currentParsed;
         moveForward();
         return string;
     }
@@ -176,7 +179,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         checkFieldAndState(ECSVFields.PR_BOOLEAN);
         String booleanValue = currentParsed;
         moveForward();
-        return Boolean.parseBoolean(booleanValue);
+        return currentParsed.equals(ECSVFormat.NULL_VALUE) ? null : Boolean.parseBoolean(booleanValue);
     }
 
     @Override
@@ -184,7 +187,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         checkFieldAndState(ECSVFields.PR_INT);
         String intValue = currentParsed;
         moveForward();
-        return Integer.parseInt(intValue);
+        return currentParsed.equals(ECSVFormat.NULL_VALUE) ? null : Integer.parseInt(intValue);
     }
 
     @Override
@@ -192,7 +195,7 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         checkFieldAndState(ECSVFields.PR_FLOAT);
         String floatValue = currentParsed;
         moveForward();
-        return Float.parseFloat(floatValue);
+        return currentParsed.equals(ECSVFormat.NULL_VALUE) ? null : Float.parseFloat(floatValue);
     }
 
     @Override
@@ -202,10 +205,14 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateField.getDateFormat());
         String dateValue = currentParsed;
         moveForward();
-        try {
-            return dateFormat.parse(dateValue);
-        } catch (ParseException pex) {
-            LOGGER.error("unable to parse date value: " + dateValue + " with format: " + dateFormat, pex);
+        if (!dateValue.equals(ECSVFormat.NULL_VALUE)) {
+            try {
+                return dateFormat.parse(dateValue);
+            } catch (ParseException pex) {
+                LOGGER.error("unable to parse date value: " + dateValue + " with format: " + dateFormat, pex);
+                return null;
+            }
+        } else {
             return null;
         }
     }
@@ -216,25 +223,29 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         ECSVFieldReference referenceField = (ECSVFieldReference) currentField;
         String referenceValue = currentParsed;
         moveForward();
-        K key = null;
-        if (referenceField.getReferenceKeyClass() == String.class) {
-            key = (K) referenceValue;
-        } else if (referenceField.getReferenceKeyClass() == Integer.class) {
-            key = (K) new Integer(Integer.parseInt(referenceValue));
-        } else if (referenceField.getReferenceKeyClass() == Float.class) {
-            key = (K) new Float(Float.parseFloat(referenceValue));
-        } else {
-            try {
-                Constructor<K> keyConstructor = referenceField.getReferenceKeyClass().getConstructor(String.class);
-                key = keyConstructor.newInstance(referenceValue);
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                LOGGER.error("unable to get enity key instance" + ex);
-            }
-        }
-        if (key != null) {
-            return new EntityReference<>(key, referenceField.getReferenceClass());
-        } else {
+        if (referenceField.equals(ECSVFormat.NULL_VALUE)) {
             return null;
+        } else {
+            K key = null;
+            if (referenceField.getReferenceKeyClass() == String.class) {
+                key = (K) referenceValue;
+            } else if (referenceField.getReferenceKeyClass() == Integer.class) {
+                key = (K) new Integer(Integer.parseInt(referenceValue));
+            } else if (referenceField.getReferenceKeyClass() == Float.class) {
+                key = (K) new Float(Float.parseFloat(referenceValue));
+            } else {
+                try {
+                    Constructor<K> keyConstructor = referenceField.getReferenceKeyClass().getConstructor(String.class);
+                    key = keyConstructor.newInstance(referenceValue);
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    LOGGER.error("unable to get enity key instance" + ex);
+                }
+            }
+            if (key != null) {
+                return new EntityReference<>(key, referenceField.getReferenceClass());
+            } else {
+                return null;
+            }
         }
     }
 
@@ -311,11 +322,15 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
         Class internalEntityClass = internalField.getEntityClass();
         String internalEntityValue = currentParsed;
         moveForward();
-        EntityHandler handler = Handlers.getHandlerByClass(internalEntityClass);
-        if (handler != null) {
-            return (E) handler.readFromString(internalEntityValue);
+        if (internalEntityValue.equals(ECSVFormat.NULL_VALUE)) {
+            return null;
+        } else {
+            EntityHandler handler = Handlers.getHandlerByClass(internalEntityClass);
+            if (handler != null) {
+                return (E) handler.readFromString(internalEntityValue);
+            }
+            return null;
         }
-        return null;
     }
 
     @Override

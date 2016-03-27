@@ -1,4 +1,4 @@
-0,Root,null,{Root directory},{Tom,true,true,false,24$Joe,true,true,false,24}
+0,Root,NULL,{Root directory},{Tom,true,true,false,24$Joe,true,true,false,24}
 1,Private,Root,{My private files},{Tom,true,true,false,24$Joe,true,true,false,24$Micky,true,true,false,24}
 2,Images,Private,{My photos and etc.},{Jackob,true,true,false,24}
 3,Video,Private,{My movies.},{Admin,true,true,false,24}

@@ -84,6 +84,9 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
             synchronized (entitiesLock) {
                 entitiesStore = readEntitiesFromStore();
             }
+            if (entitiesStore.isEmpty()) {
+                onStorageCreation();
+            }
         } else {
             this.path = null;
         }

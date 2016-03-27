@@ -105,4 +105,9 @@ public final class ECSVFormat {
      */
     public static final String INTERNAL_DEFAULT_SEPARATOR_EXPR = "\\$";
     
+    /**
+     * Default value of null content. This value should be applied only for privimitve fields.
+     */
+    public static final String NULL_VALUE = "NULL";
+    
 }
