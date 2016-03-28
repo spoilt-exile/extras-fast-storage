@@ -87,23 +87,22 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
      */
     private Boolean readyToRead = false;
     
-    public EntityReaderImpl(ECSVDefinition defintion, String rawEntityString) {
+    public EntityReaderImpl(ECSVDefinition defintion) {
         this.definition = defintion;
-        fieldIterator = this.definition.getFields().listIterator();
-        currentField = fieldIterator.next();
-        parseInit(rawEntityString);
-        readyToRead = true;
     }
     
     /**
      * Parse internal entity structure.
      * @param rawString raw entity string form;
      */
-    private void parseInit(String rawString) {
+    public void parseInit(String rawString) {
         ECSVParser parser = new ECSVParser(definition);
         parsedStrings = parser.parseEntity(rawString);
         parsedIter = parsedStrings.listIterator();
         currentParsed = parsedIter.next();
+        fieldIterator = this.definition.getFields().listIterator();
+        currentField = fieldIterator.next();
+        readyToRead = true;
     }
     
     /**

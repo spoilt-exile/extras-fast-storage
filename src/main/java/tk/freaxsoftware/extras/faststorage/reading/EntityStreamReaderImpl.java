@@ -104,8 +104,9 @@ public class EntityStreamReaderImpl<E extends ECSVAble, K> implements EntityStre
      */
     private List<E> readEntetiesInternal(List<String> rawEntities) throws InstantiationException, IllegalAccessException {
         List<E> enteties = new ArrayList<>(rawEntities.size());
+        EntityReaderImpl<K> reader = new EntityReaderImpl<>(entityDefinition);
         for (String rawEntity: rawEntities) {
-            EntityReader<K> reader = new EntityReaderImpl<>(entityDefinition, rawEntity);
+            reader.parseInit(rawEntity);
             E newEntity = getNewEntity();
             newEntity.readFromECSV(reader);
             enteties.add(newEntity);

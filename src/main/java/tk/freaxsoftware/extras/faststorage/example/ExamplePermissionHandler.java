@@ -44,7 +44,8 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
 
     @Override
     public ExamplePermission readFromString(String rawString) {
-        EntityReader<Object> reader = new EntityReaderImpl<>(reference.getDefinition(), rawString);
+        EntityReaderImpl<Object> reader = new EntityReaderImpl<>(reference.getDefinition());
+        reader.parseInit(rawString);
         ExamplePermission newEntity = new ExamplePermission();
         newEntity.readFromECSV(reader);
         return newEntity;
@@ -53,7 +54,8 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
     @Override
     public String writeToString(ExamplePermission entity) {
         StringBuffer buffer = new StringBuffer();
-        EntityWriter<Object> writer = new EntityWriterImpl<>(reference.getDefinition(), buffer);
+        EntityWriterImpl<Object> writer = new EntityWriterImpl<>(reference.getDefinition(), buffer);
+        writer.reset();
         entity.writeToECSV(writer);
         return buffer.toString();
     }

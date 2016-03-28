@@ -47,11 +47,11 @@ public class EntityReaderTest {
     @Test
     public void parseTest() throws FileNotFoundException, InstantiationException, IllegalAccessException, ECSVParseException, IOException {
         BufferedReader reader = new BufferedReader(new FileReader("test-parse.ecsv"));
+        EntityReaderImpl eReader = new EntityReaderImpl(ExampleDirectory.DEFINITION);
         while (reader.ready()) {
+            eReader.parseInit(reader.readLine());
             ExampleDirectory example = new ExampleDirectory();
-            EntityReader eReader = new EntityReaderImpl(example.getDefinition(), reader.readLine());
             example.readFromECSV(eReader);
-            
             assertNotNull(example.getId());
             assertNotNull(example.getName());
             assertNotNull(example.getParentName());

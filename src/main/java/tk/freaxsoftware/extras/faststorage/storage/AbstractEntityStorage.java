@@ -37,7 +37,6 @@ import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityStreamReaderImpl;
 import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityStreamWriterImpl;
-import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 
 /**
@@ -147,7 +146,8 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
         try {
             writer = new FileWriter(path, true);
             StringBuffer buffer = new StringBuffer();
-            EntityWriter entityWriter = new EntityWriterImpl(entityDefinition, buffer);
+            EntityWriterImpl entityWriter = new EntityWriterImpl(entityDefinition, buffer);
+            entityWriter.reset();
             entity.writeToECSV(entityWriter);
             writer.write(buffer.toString());
             writer.append(ECSVFormat.LINE_BREAK_CHAR);

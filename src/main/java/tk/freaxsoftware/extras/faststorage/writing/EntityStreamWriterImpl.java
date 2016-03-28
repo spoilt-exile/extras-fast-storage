@@ -64,8 +64,9 @@ public class EntityStreamWriterImpl<E extends ECSVAble, K> implements EntityStre
     public void writeEntities(List<E> entities, Writer entityWriter) throws EntityProcessingException {
         try {
             StringBuffer buffer = new StringBuffer();
+            EntityWriterImpl<K> writer = new EntityWriterImpl<>(this.entityDefinition, buffer);
             for (E entity: entities) {
-                EntityWriter<K> writer = new EntityWriterImpl<>(this.entityDefinition, buffer);
+                writer.reset();
                 entity.writeToECSV(writer);
                 buffer.append(ECSVFormat.LINE_BREAK_CHAR);
             }

@@ -18,12 +18,8 @@
  */
 package tk.freaxsoftware.extras.faststorage.storage;
 
-import java.util.List;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
-import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
-import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
-import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
@@ -43,7 +39,8 @@ public abstract class AbstractEntityHandler<E extends ECSVAble<K>, K> extends Ab
     @Override
     public String writeToString(E entity) {
         StringBuffer buffer = new StringBuffer();
-        EntityWriter<K> writer = new EntityWriterImpl<>(entityDefinition, buffer);
+        EntityWriterImpl<K> writer = new EntityWriterImpl<>(entityDefinition, buffer);
+        writer.reset();
         entity.writeToECSV(writer);
         return buffer.toString();
     }
@@ -51,7 +48,8 @@ public abstract class AbstractEntityHandler<E extends ECSVAble<K>, K> extends Ab
     @Override
     public E readFromString(String rawString) {
         E entity = getNewEntity();
-        EntityReader<K> reader = new EntityReaderImpl<>(entityDefinition, rawString);
+        EntityReaderImpl<K> reader = new EntityReaderImpl<>(entityDefinition);
+        reader.parseInit(rawString);
         entity.readFromECSV(reader);
         return entity;
     }

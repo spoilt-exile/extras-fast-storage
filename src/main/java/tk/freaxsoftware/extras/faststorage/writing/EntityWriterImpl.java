@@ -54,7 +54,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     /**
      * List of field defintions.
      */
-    private final ListIterator<ECSVDefinition.ECSVFieldPrimitive> fieldIterator;
+    private ListIterator<ECSVDefinition.ECSVFieldPrimitive> fieldIterator;
     
     /**
      * Current field in stack.
@@ -69,6 +69,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public EntityWriterImpl(ECSVDefinition definition, StringBuffer buffer) {
         this.definition = definition;
         this.buffer = buffer;
+    }
+    
+    public void reset() {
         fieldIterator = this.definition.getFields().listIterator();
         currentField = fieldIterator.next();
     }
@@ -78,7 +81,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
      * {@code EntityStateException} if order of writing messed up;
      * @param field called field for writing to check;
      */
-    public void checkField(ECSVFields field) {
+    private void checkField(ECSVFields field) {
         if (field != currentField.getField()) {
             throw new EntityStateException("Expected " + currentField.getField().name() + " but received " + field.name());
         }
