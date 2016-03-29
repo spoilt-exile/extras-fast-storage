@@ -18,7 +18,10 @@
  */
 package tk.freaxsoftware.extras.faststorage.generic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -251,19 +254,43 @@ public class ECSVDefinition {
      */
     public static class ECSVFieldDate extends ECSVFieldPrimitive {
         
-        private String dateFormat;
+        private final SimpleDateFormat dateFormat;
+        
+        private final Object dateFormatLock;
 
         public ECSVFieldDate(ECSVFields givenField, String givenFormat) {
             super(givenField);
-            dateFormat = givenFormat;
+            if (givenFormat != null) {
+                dateFormatLock = new Object();
+                dateFormat = new SimpleDateFormat(givenFormat);
+            } else {
+                dateFormatLock = null;
+                dateFormat = null;
+            }
         }
-
-        public String getDateFormat() {
-            return dateFormat;
+        
+        public String format(Date date) {
+            String formatedDate;
+            if (dateFormat != null) {
+                synchronized(dateFormatLock) {
+                    formatedDate = dateFormat.format(date);
+                }
+            } else {
+                return String.valueOf(date.getTime());
+            }
+            return formatedDate;
         }
-
-        public void setDateFormat(String dateFormat) {
-            this.dateFormat = dateFormat;
+        
+        public Date parse(String rawDate) throws ParseException {
+            Date parsedDate;
+            if (dateFormat != null) {
+                synchronized(dateFormatLock) {
+                    parsedDate = dateFormat.parse(rawDate);
+                }
+            } else {
+                return new Date(Long.valueOf(rawDate));
+            }
+            return parsedDate;
         }
     }
     

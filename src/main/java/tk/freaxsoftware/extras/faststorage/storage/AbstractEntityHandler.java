@@ -18,10 +18,10 @@
  */
 package tk.freaxsoftware.extras.faststorage.storage;
 
+import java.io.StringWriter;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
 import tk.freaxsoftware.extras.faststorage.generic.ECSVDefinition;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
-import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 
 /**
@@ -38,7 +38,7 @@ public abstract class AbstractEntityHandler<E extends ECSVAble<K>, K> extends Ab
 
     @Override
     public String writeToString(E entity) {
-        StringBuffer buffer = new StringBuffer();
+        StringWriter buffer = new StringWriter();
         EntityWriterImpl<K> writer = new EntityWriterImpl<>(entityDefinition, buffer);
         writer.reset();
         entity.writeToECSV(writer);

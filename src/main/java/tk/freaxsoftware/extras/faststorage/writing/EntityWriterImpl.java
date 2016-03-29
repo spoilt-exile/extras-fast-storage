@@ -18,6 +18,7 @@
  */
 package tk.freaxsoftware.extras.faststorage.writing;
 
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
 import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
 import tk.freaxsoftware.extras.faststorage.storage.Handlers;
+import tk.freaxsoftware.extras.faststorage.utils.WriterWrapper;
 
 /**
  * Default implementation of entity writer.
@@ -46,10 +48,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
      */
     private final ECSVDefinition definition;
     
-    /**
-     * Internal string buffer.
-     */
-    private final StringBuffer buffer;
+    private final WriterWrapper writer;
     
     /**
      * List of field defintions.
@@ -64,11 +63,11 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     /**
      * Default constructor.
      * @param definition fields definition from entity;
-     * @param buffer string buffer for writing;
+     * @param writer string buffer for writing;
      */
-    public EntityWriterImpl(ECSVDefinition definition, StringBuffer buffer) {
+    public EntityWriterImpl(ECSVDefinition definition, Writer writer) {
         this.definition = definition;
-        this.buffer = buffer;
+        this.writer = new WriterWrapper(writer);
     }
     
     public void reset() {
@@ -92,7 +91,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
      */
     public void moveForward() {
         if (fieldIterator.hasNext()) {
-            buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
+            writer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
             currentField = fieldIterator.next();
         } else {
             currentField = null;
@@ -105,7 +104,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
         if (key == null) {
             throw new EntityStateException("Entity key can't be null!");
         }
-        buffer.append(key.toString());
+        writer.append(key.toString());
         moveForward();
     }
 
@@ -113,9 +112,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeWord(String word) {
         checkField(ECSVFields.PR_WORD);
         if (word == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(word);
+            writer.append(word);
         }
         moveForward();
     }
@@ -124,11 +123,11 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeString(String string) {
         checkField(ECSVFields.PR_STRING);
         if (string == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
-            buffer.append(string);
-            buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
+            writer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
+            writer.append(string);
+            writer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         }
         moveForward();
     }
@@ -137,9 +136,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeBoolean(Boolean bool) {
         checkField(ECSVFields.PR_BOOLEAN);
         if (bool == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(bool.toString());
+            writer.append(bool.toString());
         }
         moveForward();
     }
@@ -148,9 +147,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeInteger(Integer integer) {
         checkField(ECSVFields.PR_INT);
         if (integer == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(integer.toString());
+            writer.append(integer.toString());
         }
         moveForward();
     }
@@ -159,9 +158,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeFloat(Float flt) {
         checkField(ECSVFields.PR_FLOAT);
         if (flt == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(flt.toString());
+            writer.append(flt.toString());
         }
         moveForward();
     }
@@ -170,12 +169,12 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public void writeDate(Date date) {
         checkField(ECSVFields.SC_DATE);
         if (date == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
             ECSVDefinition.ECSVFieldDate dateField = (ECSVDefinition.ECSVFieldDate) currentField;
-            buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
-            buffer.append(new SimpleDateFormat(dateField.getDateFormat()).format(date));
-            buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
+            writer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
+            writer.append(dateField.format(date));
+            writer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         }
         moveForward();
     }
@@ -184,9 +183,9 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public <R extends ECSVAble<K>, K> void writeReference(EntityReference<R, K> reference) {
         checkField(ECSVFields.SC_REF);
         if (reference == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(reference.getKey().toString());
+            writer.append(reference.getKey().toString());
         }
         moveForward();
     }
@@ -194,45 +193,45 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     @Override
     public <R extends ECSVAble<K>, K> void writeReferenceArray(EntityListReference<R, K> referenceArray) {
         checkField(ECSVFields.SC_REF_ARRAY);
-        buffer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
+        writer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
         if (referenceArray != null) {
             ListIterator<K> keysIter = referenceArray.getKeys().listIterator();
             while (keysIter.hasNext()) {
                 K key = keysIter.next();
-                buffer.append(key.toString());
+                writer.append(key.toString());
                 if (keysIter.hasNext()) {
-                    buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
+                    writer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
                 }
             }
         }
-        buffer.append(ECSVFormat.ARRAY_END_CHAR);
+        writer.append(ECSVFormat.ARRAY_END_CHAR);
         moveForward();
     }
 
     @Override
     public void writeArray(List array) {
         checkField(ECSVFields.CX_ARRAY);
-        buffer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
+        writer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
         if (array != null) {
             ECSVDefinition.ECSVFieldArray arrayField = (ECSVDefinition.ECSVFieldArray) currentField;
             ECSVDefinition.FieldConverter converter = arrayField.getTypeConverter();
             ListIterator arrayIter = array.listIterator();
             while (arrayIter.hasNext()) {
                 Object element = arrayIter.next();
-                buffer.append(converter != null ? converter.convertTo(element) : element.toString());
+                writer.append(converter != null ? converter.convertTo(element) : element.toString());
                 if (arrayIter.hasNext()) {
-                    buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
+                    writer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
                 }
             }
         }
-        buffer.append(ECSVFormat.ARRAY_END_CHAR);
+        writer.append(ECSVFormat.ARRAY_END_CHAR);
         moveForward();
     }
 
     @Override
     public void writeMap(Map map) {
         checkField(ECSVFields.CX_MAP);
-        buffer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
+        writer.append(ECSVFormat.ARRAY_BEGIN_CHAR);
         if (map != null) {
             ECSVDefinition.ECSVFIeldMap mapField = (ECSVDefinition.ECSVFIeldMap) currentField;
             ECSVDefinition.FieldConverter keyConverter = mapField.getKeyConverter();
@@ -240,15 +239,15 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
             Iterator<Map.Entry> mapIterator = map.entrySet().iterator();
             while (mapIterator.hasNext()) {
                 Map.Entry entry = mapIterator.next();
-                buffer.append(keyConverter != null ? keyConverter.convertTo(entry.getKey()) : entry.getKey().toString());
-                buffer.append(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
-                buffer.append(valueConverter != null ? valueConverter.convertTo(entry.getValue()) : entry.getValue().toString());
+                writer.append(keyConverter != null ? keyConverter.convertTo(entry.getKey()) : entry.getKey().toString());
+                writer.append(ECSVFormat.KEY_VALUE_SEPARATOR_CHAR);
+                writer.append(valueConverter != null ? valueConverter.convertTo(entry.getValue()) : entry.getValue().toString());
                 if (mapIterator.hasNext()) {
-                    buffer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
+                    writer.append(ECSVFormat.GENERIC_SEPARATOR_CHAR);
                 }
             }
         }
-        buffer.append(ECSVFormat.ARRAY_END_CHAR);
+        writer.append(ECSVFormat.ARRAY_END_CHAR);
         moveForward();
     }
 
@@ -256,12 +255,12 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     public <E extends ECSVAble> void writeInternal(E entity) {
         checkField(ECSVFields.CX_INTERNAL);
         if (entity == null) {
-            buffer.append(ECSVFormat.NULL_VALUE);
+            writer.append(ECSVFormat.NULL_VALUE);
         } else {
-            buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
+            writer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
             EntityHandler handler = Handlers.getHandlerByClass(entity.getClass());
-            buffer.append(handler.writeToString(entity));
-            buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
+            writer.append(handler.writeToString(entity));
+            writer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         }
         moveForward();
     }
@@ -269,7 +268,7 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
     @Override
     public <E extends ECSVAble> void writeInternalArray(List<E> entityArray) {
         checkField(ECSVFields.CX_INTERNAL_ARRAY);
-        buffer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
+        writer.append(ECSVFormat.WHITE_ZONE_BEGIN_CHAR);
         if (entityArray != null) {
             ECSVDefinition.ECSVFieldInternal internalField = (ECSVDefinition.ECSVFieldInternal) currentField;
             if (!entityArray.isEmpty()) {
@@ -277,14 +276,14 @@ public class EntityWriterImpl<K> implements EntityWriter<K> {
                 ListIterator<E> entityIter = entityArray.listIterator();
                 while (entityIter.hasNext()) {
                     E entity = entityIter.next();
-                    buffer.append(handler.writeToString(entity));
+                    writer.append(handler.writeToString(entity));
                     if (entityIter.hasNext()) {
-                        buffer.append(internalField.getSeparator());
+                        writer.append(internalField.getSeparator());
                     }
                 }
             }
         }
-        buffer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
+        writer.append(ECSVFormat.WHITE_ZONE_END_CHAR);
         moveForward();
     }
     

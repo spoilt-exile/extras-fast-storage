@@ -63,7 +63,7 @@ public class EntityStreamWriterImpl<E extends ECSVAble, K> implements EntityStre
     @Override
     public void writeEntities(List<E> entities, Writer entityWriter) throws EntityProcessingException {
         try {
-            StringBuffer buffer = new StringBuffer();
+            StringWriter buffer = new StringWriter();
             EntityWriterImpl<K> writer = new EntityWriterImpl<>(this.entityDefinition, buffer);
             for (E entity: entities) {
                 writer.reset();

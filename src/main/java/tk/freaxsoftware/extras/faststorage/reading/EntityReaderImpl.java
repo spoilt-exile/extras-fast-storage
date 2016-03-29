@@ -201,14 +201,13 @@ public class EntityReaderImpl<K> implements EntityReader<K> {
     public Date readDate() {
         checkFieldAndState(ECSVFields.SC_DATE);
         ECSVFieldDate dateField = (ECSVFieldDate) currentField;
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateField.getDateFormat());
         String dateValue = currentParsed;
         moveForward();
         if (!dateValue.equals(ECSVFormat.NULL_VALUE)) {
             try {
-                return dateFormat.parse(dateValue);
+                return dateField.parse(dateValue);
             } catch (ParseException pex) {
-                LOGGER.error("unable to parse date value: " + dateValue + " with format: " + dateFormat, pex);
+                LOGGER.error("unable to parse date: " + dateValue);
                 return null;
             }
         } else {

@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -145,7 +146,7 @@ public abstract class AbstractEntityStorage<E extends ECSVAble<K>, K> implements
         FileWriter writer = null;
         try {
             writer = new FileWriter(path, true);
-            StringBuffer buffer = new StringBuffer();
+            StringWriter buffer = new StringWriter();
             EntityWriterImpl entityWriter = new EntityWriterImpl(entityDefinition, buffer);
             entityWriter.reset();
             entity.writeToECSV(entityWriter);

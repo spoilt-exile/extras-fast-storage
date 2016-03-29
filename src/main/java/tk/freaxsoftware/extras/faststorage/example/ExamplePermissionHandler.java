@@ -18,13 +18,10 @@
  */
 package tk.freaxsoftware.extras.faststorage.example;
 
+import java.io.StringWriter;
 import java.util.List;
-import tk.freaxsoftware.extras.faststorage.generic.EntityListReference;
-import tk.freaxsoftware.extras.faststorage.generic.EntityReference;
-import tk.freaxsoftware.extras.faststorage.reading.EntityReader;
 import tk.freaxsoftware.extras.faststorage.reading.EntityReaderImpl;
 import tk.freaxsoftware.extras.faststorage.storage.EntityHandler;
-import tk.freaxsoftware.extras.faststorage.writing.EntityWriter;
 import tk.freaxsoftware.extras.faststorage.writing.EntityWriterImpl;
 
 /**
@@ -53,7 +50,7 @@ public class ExamplePermissionHandler implements EntityHandler<ExamplePermission
 
     @Override
     public String writeToString(ExamplePermission entity) {
-        StringBuffer buffer = new StringBuffer();
+        StringWriter buffer = new StringWriter();
         EntityWriterImpl<Object> writer = new EntityWriterImpl<>(reference.getDefinition(), buffer);
         writer.reset();
         entity.writeToECSV(writer);
