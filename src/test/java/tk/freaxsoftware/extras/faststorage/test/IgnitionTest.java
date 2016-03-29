@@ -73,7 +73,8 @@ public class IgnitionTest {
     }
     
     @After
-    public void tearDown() {
+    public void teardown() {
+        Handlers.clearHandlers();
     }
     
 }

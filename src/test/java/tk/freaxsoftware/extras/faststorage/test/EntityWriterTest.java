@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
@@ -62,5 +63,10 @@ public class EntityWriterTest {
     @Before
     public void initHandler() {
         Handlers.registerHandler(TYPE, ExamplePermission.class, new ExamplePermissionHandler());
+    }
+    
+    @After
+    public void teardown() {
+        Handlers.clearHandlers();
     }
 }

@@ -19,9 +19,10 @@
 package tk.freaxsoftware.extras.faststorage.test;
 
 import java.io.StringWriter;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectory;
 import tk.freaxsoftware.extras.faststorage.example.ExampleDirectoryHandler;
 import tk.freaxsoftware.extras.faststorage.example.ExamplePermission;
@@ -63,5 +64,10 @@ public class EntityMapEntryTest {
     public void setUp() {
         Handlers.registerHandler(ExampleDirectory.TYPE, ExampleDirectory.class, new ExampleDirectoryHandler());
         Handlers.registerHandler(ExamplePermission.TYPE, ExamplePermission.class, new ExamplePermissionHandler());
+    }
+    
+    @After
+    public void teardown() {
+        Handlers.clearHandlers();
     }
 }

@@ -19,6 +19,7 @@
 package tk.freaxsoftware.extras.faststorage.test;
 
 import java.util.List;
+import org.junit.After;
 import org.junit.Assert;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -90,4 +91,8 @@ public class EntityMapTest {
         Handlers.registerHandler(ExamplePermission.TYPE, ExamplePermission.class, new ExamplePermissionHandler());
     }
     
+    @After
+    public void teardown() {
+        Handlers.clearHandlers();
+    }
 }

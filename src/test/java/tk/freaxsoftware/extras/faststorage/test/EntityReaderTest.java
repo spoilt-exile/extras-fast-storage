@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,5 +77,10 @@ public class EntityReaderTest {
     @Before
     public void initHandler() {
         Handlers.registerHandler(TYPE, ExamplePermission.class, new ExamplePermissionHandler());
+    }
+    
+    @After
+    public void teardown() {
+        Handlers.clearHandlers();
     }
 }

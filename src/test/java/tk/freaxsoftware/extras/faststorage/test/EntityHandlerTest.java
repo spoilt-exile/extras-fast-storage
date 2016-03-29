@@ -80,6 +80,7 @@ public class EntityHandlerTest {
     
     @After
     public void tearDown() {
+        Handlers.clearHandlers();
         File storageFile = new File(STORAGE_FILE);
         storageFile.delete();
     }

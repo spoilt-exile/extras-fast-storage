@@ -77,6 +77,13 @@ public class Handlers {
     }
     
     /**
+     * Clear halder mapping. Use with care!
+     */
+    public static void clearHandlers() {
+        records.clear();
+    }
+    
+    /**
      * Internal record class.
      */
     private static class Record {
