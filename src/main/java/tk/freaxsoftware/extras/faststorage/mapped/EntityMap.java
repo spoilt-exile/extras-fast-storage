@@ -81,6 +81,38 @@ public interface EntityMap {
     <V extends ECSVAble> List<V> getList(String key, Class<V> valueClass);
     
     /**
+     * Get list of entities by it's internal type.
+     * @param entityType internal entity type;
+     * @return list of entities or empty list;
+     */
+    List<ECSVAble> getListByType(String entityType);
+    
+    /**
+     * Get list of casted entities by it's internal type.
+     * @param <V> value class generic type;
+     * @param entityType internal entity type.
+     * @param valueClass class of entity whiche expected;
+     * @return list of casted entities or empty list;
+     */
+    <V extends ECSVAble> List<V> getListByType(String entityType, Class<V> valueClass);
+    
+    /**
+     * Get list of entities by standard regex.
+     * @param expression pattern expression;
+     * @return list of entities or empty list;
+     */
+    List<ECSVAble> getListByRegex(String expression);
+    
+    /**
+     * Get list of casted entities by standard regex.
+     * @param <V> value class generic type.
+     * @param expression pattern expression;
+     * @param valueClass class of entity whiche expected;
+     * @return list of casted entities or empty list;
+     */
+    <V extends ECSVAble> List<V> getListByRegex(String expression, Class<V> valueClass);
+    
+    /**
      * Check key for presense.
      * @param key string key to check;
      * @return true if key finded or false otherwise;
@@ -120,9 +152,14 @@ public interface EntityMap {
     void remove(String key, Object entityKey);
     
     /**
-     * Remove all entries.
+     * Remove entities specified in list.
      */
-    void removeAll();
+    void removeAll(List<String> keys);
+    
+    /**
+     * Clear map, delete all entities.
+     */
+    void clear();
     
     /**
      * Reads map from string and fill current instance with it.

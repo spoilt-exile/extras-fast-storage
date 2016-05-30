@@ -68,6 +68,12 @@ public class EntityMapTest {
         List<ExampleDirectory> childDirectories = map.getList("ChildrenDirs", ExampleDirectory.class);
         Assert.assertEquals(4, childDirectories.size());
         
+        List<ExampleDirectory> childDirectories2 = map.getListByRegex("Child[A-Za-z]*", ExampleDirectory.class);
+        Assert.assertEquals(4, childDirectories2.size());
+        
+        List<ExampleDirectory> childDirectories3 = map.getListByType(ExampleDirectory.TYPE, ExampleDirectory.class);
+        Assert.assertEquals(5, childDirectories3.size());
+        
         String rawMap = map.writeToEcsv();
         Assert.assertEquals(MAP_RAW, rawMap);
         

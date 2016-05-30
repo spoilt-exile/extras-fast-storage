@@ -27,11 +27,14 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.freaxsoftware.extras.faststorage.exception.EntityStoreException;
@@ -41,7 +44,7 @@ import tk.freaxsoftware.extras.faststorage.generic.ECSVAble;
  * Entity map implementation.
  * @author Stanislav Nepochatov
  */
-public class DefaultEntityMap implements EntityMap {
+public class DefaultEntityMap implements EntityMap, Iterable<EntityMapEntry> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultEntityMap.class);
     
@@ -126,6 +129,59 @@ public class DefaultEntityMap implements EntityMap {
         } 
         return Collections.EMPTY_LIST;
     }
+    
+    @Override
+    public Iterator<EntityMapEntry> iterator() {
+        return entries.iterator();
+    }
+
+    @Override
+    public List<ECSVAble> getListByType(String entityType) {
+        List<ECSVAble> entities = new ArrayList<>();
+        for (EntityMapEntry entry: entries) {
+            if (entry.getType().equals(entityType) && entry.isParsed()) {
+                entities.add(entry.getEntity());
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public <V extends ECSVAble> List<V> getListByType(String entityType, Class<V> valueClass) {
+        List<V> entities = new ArrayList<>();
+        for (EntityMapEntry entry: entries) {
+            if (entry.getType().equals(entityType) && entry.isParsed()) {
+                entities.add(entry.getEntity(valueClass));
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public List<ECSVAble> getListByRegex(String expression) {
+        List<ECSVAble> entities = new ArrayList<>();
+        Pattern pattern = Pattern.compile(expression);
+        for (EntityMapEntry entry: entries) {
+            Matcher matcher = pattern.matcher(entry.getKey());
+            if (matcher.matches() && entry.isParsed()) {
+                entities.add(entry.getEntity());
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public <V extends ECSVAble> List<V> getListByRegex(String expression, Class<V> valueClass) {
+        List<V> entities = new ArrayList<>();
+        Pattern pattern = Pattern.compile(expression);
+        for (EntityMapEntry entry: entries) {
+            Matcher matcher = pattern.matcher(entry.getKey());
+            if (matcher.matches() && entry.isParsed()) {
+                entities.add(entry.getEntity(valueClass));
+            }
+        }
+        return entities;
+    }
 
     @Override
     public boolean containsKey(String key) {
@@ -175,7 +231,14 @@ public class DefaultEntityMap implements EntityMap {
     }
 
     @Override
-    public void removeAll() {
+    public void removeAll(List<String> keys) {
+        for (String key: keys) {
+            remove(key);
+        }
+    }
+
+    @Override
+    public void clear() {
         entries = new ArrayList<>();
         entriesMap = new HashMap<>();
     }
